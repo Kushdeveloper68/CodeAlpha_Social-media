@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SocialX Profile Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066ff",
+                        "accent": "#00C2A8",
+                        "dark": "#0F172A",
+                        "muted": "#64748B",
+                        "background-light": "#F7FAFC",
+                        "background-dark": "#0f1723",
+                        "card": "#FFFFFF",
+                        "card-dark": "#1e293b",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#334155"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex items-center justify-center whitespace-nowrap border-b border-border-light dark:border-border-dark bg-card/80 dark:bg-card-dark/80 backdrop-blur-sm">
+<div class="flex items-center justify-between w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-dark dark:text-white">
+<div class="w-8 h-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z"></path>
+</svg>
+</div>
+<h2 class="text-dark dark:text-white text-xl font-bold">SocialX</h2>
+</div>
+</div>
+<div class="hidden md:flex flex-1 justify-center max-w-md">
+<label class="flex flex-col w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-10">
+<div class="text-muted flex bg-background-light dark:bg-background-dark items-center justify-center pl-3 rounded-l-lg">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-dark dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-background-light dark:bg-background-dark h-full placeholder:text-muted px-4 rounded-l-none pl-2 text-base" placeholder="Search SocialX" value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4">
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-dark dark:text-white text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-dark dark:text-white text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Explore</a>
+<a class="text-dark dark:text-white text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Notifications</a>
+<a class="text-dark dark:text-white text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Messages</a>
+</div>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-background-light dark:bg-background-dark text-dark dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBziVjYVqBtMVYmgK_fur_MYcl8f0K4r0StYUOv5FQTVXeD5A28BbaQZ0iOVOxu8dgQ3LOuuoyw2TZra_aQaVj8FQYvPiVLa4Fl1pdmNQXnPDK-DXMz-tfKJbsZrEg-x22FCljcRj3c1p44gTQBJkqo3ZK3oQj4hXXWcDh3aWPeT51Gwd42csHwanxyIO0MI_ioX2oJVYxZg-bC93YRFOnbf-x9gLnqH7_3YkPK8Aj3gtYsfzVjt3AU25WtC1gstObdamwDxPuaVGjI");'></div>
+</div>
+</div>
+</header>
+<main class="layout-container flex h-full grow flex-col items-center">
+<div class="layout-content-container flex flex-col w-full max-w-5xl flex-1">
+<!-- HeaderImage -->
+<div class="w-full h-48 md:h-64 mt-4 px-4">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden rounded-2xl" data-alt="Abstract gradient banner with shades of blue and purple" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBFiC5sTU8ZF6XbUNiWs6TLTng08aNWvbK201MMyG89-uwLXu615dKm66wTBHGIKKvuHNF8WZy5fEK5XpS52fKwRIg6e-lkenRYN_GdK0jl1O8iui9idJWasK0kLT2GMnTgg1oY2849LXTvkWV_a7PuLj2z9Jri-mc01T9-Y1Xknoch3JPBCLdNWliSXD8s-eEvL48nZ2pssyCUjgR4tv80RziNtlFq-u6478iljuRRcL0z7FQVOiJ4rScpcf7nNkWpa2h1BcBhEMN");'></div>
+</div>
+<!-- Profile Container -->
+<div class="p-4 bg-card dark:bg-card-dark rounded-b-2xl shadow-sm -mt-24 mx-4 pt-28 relative">
+<!-- ProfileHeader -->
+<div class="flex w-full flex-col gap-4 @container md:flex-row md:justify-between md:items-center">
+<div class="flex gap-4 items-center">
+<div class="absolute -top-16 left-8 bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 md:h-40 md:w-40 border-4 border-card dark:border-card-dark" data-alt="Profile picture of Eleanor Vance" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0ZNjXVqvPpGrRPrMVcLuJ8KTVUrjuoVVc3w0LZizCWB-wFDa4yqDLeTnrjODqkq8l6nNM7dAwxEN738IG-T0rur3F93dxzQFDkAY-0GS51OGiVNZ27jnXQLIUkjKJrPNAacSP7nkWoEoRpmuYVbAwim4UWZ4mO5fPpLV-xSCnLIfon9e_gVO7NdfI_6F4P1OfeNgHdBUpr2ygVuMv-tkLDLylwZ4tOIYXbhLHqWZWHKdnHd1DYx3MBehWWPDJKhYA9U83YMjHXiha");'></div>
+<div class="flex flex-col justify-center flex-grow pt-16 md:pt-0 md:pl-48">
+<p class="text-dark dark:text-white text-2xl font-bold">Eleanor Vance</p>
+<p class="text-muted text-base font-normal">@eleanorvance</p>
+<p class="text-muted text-base font-normal mt-2 max-w-md">
+                                    Digital artist &amp; photographer exploring the intersection of nature and technology. Based in San Francisco.
+                                </p>
+</div>
+</div>
+<div class="flex w-full max-w-[480px] gap-3 @[480px]:w-auto mt-4 md:mt-0">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-wide flex-1 @[480px]:flex-auto hover:bg-primary/90 transition-colors">
+<span class="truncate">Follow</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold tracking-wide flex-1 @[480px]:flex-auto hover:bg-accent/90 transition-colors">
+<span class="truncate">Message</span>
+</button>
+</div>
+</div>
+<!-- ProfileStats -->
+<div class="flex flex-wrap gap-3 py-3 mt-4">
+<div class="flex min-w-[111px] flex-1 basis-[fit-content] flex-col gap-1 rounded-lg border border-border-light dark:border-border-dark p-3 items-start">
+<p class="text-dark dark:text-white text-2xl font-bold">1,204</p>
+<div class="flex items-center gap-2"><p class="text-muted text-sm font-normal">Posts</p></div>
+</div>
+<div class="flex min-w-[111px] flex-1 basis-[fit-content] flex-col gap-1 rounded-lg border border-border-light dark:border-border-dark p-3 items-start">
+<p class="text-dark dark:text-white text-2xl font-bold">25.8K</p>
+<div class="flex items-center gap-2"><p class="text-muted text-sm font-normal">Followers</p></div>
+</div>
+<div class="flex min-w-[111px] flex-1 basis-[fit-content] flex-col gap-1 rounded-lg border border-border-light dark:border-border-dark p-3 items-start">
+<p class="text-dark dark:text-white text-2xl font-bold">1,530</p>
+<div class="flex items-center gap-2"><p class="text-muted text-sm font-normal">Following</p></div>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="mt-4 px-4">
+<div class="flex border-b border-border-light dark:border-border-dark gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary pb-3 pt-2" href="#">
+<p class="text-primary text-sm font-bold">Posts</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent pb-3 pt-2" href="#">
+<p class="text-muted hover:text-dark dark:hover:text-white text-sm font-bold transition-colors">Media</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent pb-3 pt-2" href="#">
+<p class="text-muted hover:text-dark dark:hover:text-white text-sm font-bold transition-colors">About</p>
+</a>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+<!-- Post Card 1 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="A tranquil forest scene with sunbeams filtering through the trees" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAx3eO0MeVAF0oYl1c-wrNDDs7SyouK6jkpc7QJOCbepL6sQZBFBQoJDJwE5eiElO3xDxOuByIEk-T-Nd-wWuhxh-Vrp6Vj0h717BfIlwHaA7aJ3_TX2BeOLhShd8X0PyRDrt24ZumvdZg973L7Thnbu62dMXycVrGh3dN76Ymwg348M9xu16M4s7YPaIuG_yB4hRVBhPw2My-GpBiBMHwQaf9BPcsQJhzAWGW1bNgNNJ0kHUNACcAZaGyZ6WmaiOiHLnZ55oa-K9I5");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">Lost in the woods. 🌲 Found my peace.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">312</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">45</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Post Card 2 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="Close-up of a vintage camera on a wooden table" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA8uQ-kzAeSfYBtwM37k3OdVQk8ev2CqSRqEyzeZFCpoL7tZLjne_qqy-BftC6INNTI4Kb_Bre7qVTi-U0IhoWXqP1n4vcd1LyMmVXYy34_kYNVsHx3pZ4qteMHqLxElzwBdvXsBnZGgj7joTKcuMT2WmVtJWnIDXzyckWsCvzYuFrtD5BaCqskRZSF-Ojuhuq2ugslnyd9vkdzE6Kx-Gm-cls8m_VJYpqy4KXP9egeclOfFtFN8EPaTq49mOMq-G6lcgy_NEyAxvgW");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">Capturing moments, one frame at a time.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">560</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">88</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Post Card 3 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="A bustling city street at night with neon lights" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAeJ3SBuFp-UYvuwYvYO6vspw6m7s55VcU5pGX6cepvhzaVGAgObFBoQ2XbfJPwX3-kx2I-pjvbo4szMuqyfVDgouhNubp9HStf3hV5uDu2BE_QzVwJ6hyjy4EeiA6CRVRm7C17qU0uoNSV05m1ytjzATv9-x8XPeED3B9IBSTqrrRKcSBAZIXiTgvMZeUZZ0g9yhssj0ttT-hPGulao_yDtR2u5IdvgDsRa50_joTDZfgPH32Ejg9Uf1G-_-qmZyCF_3D_1n-k3SVd");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">City lights and late night adventures.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">721</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">102</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Post Card 4 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="Abstract digital art with flowing lines of light" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDHbAWA1rZ_5QGYXmo600fNOVNOyXsH12f0MFRa4rXxCqSZD4bjPa-PsVxrh_phAwfqNpexaFpp388r6whWUf5ZNRExJV90CNhCaa5qgRZ2UohRcqN-HkByTDk5nTGmRS_ODRvDQHddoFpAj3Llp5OlkPRNF18lgMZC45VzarpZ4XsOfZ-eY2SNbvNCVZxQud6Ra501jIswFNIQ9pj1ca33yUeCn2i7nba6WMWWiLhQv7a9dMEfHeQgQcYll1Fs3lpLMxtYnajNuK8a");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">Experimenting with new light painting techniques.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">459</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">67</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Post Card 5 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="A person sketching in a notebook with coffee on the side" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBcO-BLgVMJfHwXoN5LRhkaKAdSE8VHLkd9IFyPz3Y1GM46lOA_zKgdbwCqmFamMD2IIsBKc-ZcH5KWnaA6nwX3Ghl9ZaVsF9LHAt0Z0825a4V3BcbvCive-IFX0QigzsBKHkO97bQjldF1LQWlLXoeD54qQWCU0vsO9oW79_wdp-hGUGYY0E8KIvVHyr32Lk1gVJss3o3zHU786ftInmLpO_ZrmJy46UTdlW6LKNAlUToyf2Go9Uv3jspK7EXO8wc1vD2cuPh8Zb7J");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">Morning coffee and creative flows.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">289</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">32</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Post Card 6 -->
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-2xl shadow-sm overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover" data-alt="A wide landscape shot of mountains at sunset" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCES7OMszAdpciq4R2Ip9r8fZY76W0N0AOOYN2g3asIlQi0NTWD13t6OSEZBKtwV3IQ8vLXCXhgnXRP0hGcmAnNlCBMIjAF5jzCN62GieAVQJSZLs0_wSYVEJnfkx0A1BVInKf4bl1Ba41WllzgsygJkSacYeLTZM55VZZT_HZ5fcmSvQwEsFxkwQcXOy77ENQNFmAnWzHwRgzqqCd84FO-e5GnYwkcvqT1nZa-b9OkmTOWg0hs-tGFrOJTXBOLoi4nyKMISKjk6T4u");'></div>
+<div class="p-4 flex flex-col gap-2">
+<p class="text-dark dark:text-white text-base font-medium">The mountains are calling and I must go.</p>
+<div class="flex items-center gap-4 text-muted pt-2">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">983</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">150</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

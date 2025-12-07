@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SocialX Explore Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0066ff",
+              "background-light": "#f5f7f8",
+              "background-dark": "#0f1723",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center">
+<div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 sm:px-10 py-3 bg-white dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-slate-900 dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path></svg>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold">SocialX</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">Home</a>
+<a class="text-primary dark:text-primary text-sm font-bold" href="#">Explore</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">Messages</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary" href="#">Notifications</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4">
+<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 dark:text-slate-400 flex border-none bg-background-light dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-background-light dark:bg-slate-800 h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal" placeholder="Search" value=""/>
+</div>
+</label>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-white gap-2 text-sm font-bold min-w-0 px-2.5">
+<span class="material-symbols-outlined">light_mode</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar of Jane Doe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCKJZ3tXnRTf791TGkt5WUO6dYawoaKGGkRoNgzmHwfpElZ8bhLPiA0fElvHVxklmgwqFnVXVmg0-SbFPheH1uy45MG26ZBw8la-Rb_9rix_i0GqkEVvsdewu_JavEMMcj9AreODrcG7iE0s8KbVaEjUsjoZtak6goX631hsxX0UwltLcHowWTgqmNKxqGWdsRWw9hAdp7gWZ42UIh_9_4fzYmNINm2LiTrnHcE2CI4AH_2fAV28o9sLz1LTz2jZARXyvHZFMl5G-V9');"></div>
+</div>
+</header>
+<main class="px-4 sm:px-6 lg:px-10 py-8">
+<div class="flex flex-col gap-8">
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-14 w-full max-w-2xl mx-auto">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-sm">
+<div class="text-slate-500 dark:text-slate-400 flex border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 items-center justify-center pl-5 rounded-l-xl">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal" placeholder="Search posts, users, or hashtags..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3 px-4 py-3 overflow-x-auto justify-center">
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary pl-4 pr-4 cursor-pointer">
+<p class="text-white text-sm font-medium">All</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary pl-4 pr-4 cursor-pointer">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Photos</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary pl-4 pr-4 cursor-pointer">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Videos</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary pl-4 pr-4 cursor-pointer">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Text</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary pl-4 pr-4 cursor-pointer">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Articles</p>
+</div>
+</div>
+<div>
+<h2 class="text-slate-900 dark:text-white text-2xl font-bold px-4 pb-3 pt-5">Trending Users</h2>
+<div class="flex w-full overflow-x-auto px-4 py-3">
+<div class="flex min-h-min flex-row items-start justify-start gap-6">
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_one"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_one</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_two"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_two</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_three"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_three</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_four"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_four</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_five"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_five</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_six"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_six</p>
+</div>
+<div class="flex flex-col justify-center items-center gap-2 w-20 text-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-primary p-0.5" data-alt="User avatar of user_seven"><div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_NsugJSE8RQX7WK1LfS0msKdsZgAMXfIpjUtIJBE4axfWAmv-Kd0k8yG6wiWezznVfepzfbdX8GanCCWyRRIjwo8-aTkW0jEtyoAjsgHXdnkAKm0GXuk0DvKGwP22YeTkuuxKIT3GJf7GUFU0rAYFu-QVtm_cLueQ_Fpo9eKh6nbqnLUWj3HW7HRGXWNQDcqU-BBTWyTlWlUddNlJznXPEHOpCZuUlrNPfyMC1cJiYrbC6ACyAHOA_ZgtMNT3psaqZc94NI9ZuJJg');"></div></div>
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium truncate w-full">user_seven</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-slate-900 dark:text-white text-2xl font-bold px-4 pb-3 pt-5">Trending Posts</h2>
+<div class="px-4 py-3">
+<div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6">
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A bright yellow sports car parked on the street." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_QrkqA6Is7_KWVbxv4U26-HF_rwO6OnSdH4PPdti0WJVv4zTAtlobZtp65wBNbgcZqddUUNd6lAtlgy3CbfD_aWIrXEQCGVa2bHftvVnI3CHrdv12C3W3wMTqTrHxmDzIoCt6ZvoM2PefQeTaK6TMykqdl5NtkqlsESdSZV_wh9YkXAF_yEvX7iitRVRMQTPa5sk445OWNqcABDyTuv0g4SerMk9D0mQlPvkgj7uOU-Kcye19zAU8pecWu3eMzgc6PfHWEPBJru0J"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Carl P." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-XDzRQ7oVetlDlxipO1HN_if1KXHRIFJSw0xd4bIXy6LzquloJncaGMo3xBB-T-hi2RpCtHLr-t5e5nk06pU_DGuujUCweBl0D2x-eZwhzgmndhnqmE9RudjIkIjWjk0ATc0ToAhmBLSR7L961_NSlkCnV8sDnmx4sX2TSH0oGFQd1qxEf9RGPvykNmou_jGovWhPQ4GFztUen5Sg26o-K3zIOtclzPlghF0FBCbZ41TqmlKTLzVBYCnvrzsfY_fYAGKwBDv80c3w"/>
+<p class="text-white text-sm font-semibold">Carl P.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="Abstract art with flowing colors of purple and blue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-XHb7GHCfWkl-hV7GAPahHcHRGgPN6oScrLZsJe7bFnjQLvUpbGig6BuBUUglcyuQQ1xIEBWhrnathu2mhWVwx8aHO6nkwrRfQZmSgznbDBdwdBmUT7TB4cBOPpWp5ImBYNwzyPLuPd3Djpwm6dBqepm8eTvUKvO79eWfJh2Aofy6jWcRhlKrbXqDhJwwzhyAGPYRRJDTMdXUvI7EhqNdeKo3Y_-9ssYsIxoUtNHpux6c8NF8GkKvaSfBQfmkghTjLAf8XR7KrytH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Julia M." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQGYrulDHliP_dzCx-tpNoQqOrA8B7iGz-rrNUVMQAsDLuBz2JU76CnJU2ZakQjLvjsTtwuxyDlfptOBjlNCYWILUCKvO-fTh1FZ5GAcQLUyGDTv5nR15jB-40UunARzX4fpWNLqEOmD-0C-hjbLX7cNf7G7QxoEiehSfwaH354WJMKxh0aaMdB7r65iAA-1geeYh3_Q_X7x9ca975TgbuwnKvCZMbwOj4YcWjyKhHdjUQOUn48yonrbflF1oF4XLgrohv9SpeQdcV"/>
+<p class="text-white text-sm font-semibold">Julia M.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A lush green forest with sunbeams shining through the trees." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2M6ATnQpXaxKJHR8xytj_w1E3jO2F-G54QuR_qVSF647loyjSxJ2FTvQrLyUnOagJaZW_CrzRTLPOnEv6u1NsLLkZIkPmxfPmz9PnuF7cSARqTwnrUcqD9dI_MsOXSdNTqSEHgWLJbr7Yn4UEeigv4KfjEmyqqiU3yWv_G5DTSsxiggApcwQuDCXENsHpEoNHrLzM6CCepmvwJIJOVrddqqwaL0UuSW-UFzw9DbjIE1F1n--n6ncTEiEuy4DkNvToU3ShMZFNS4e6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Alex G." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBstGCHpfv4GhBxRJwwWJxzB7aNAw828q8Y6_xV6TLaAOf8fMDyRnkc7bfjOktetIJcBb7JzQ5FQHqwwW932UFmlR9-4RTfzHxgPdntscuA9lZPBQDCk2cbGTC4t1ksxW1WwjSthQNzbJQMa0bhH1CKGY4Fe8MQ9iqK71NABk0bv0a2zp6Ti9Ex1KeJK-Ow-WjVDZ6z0g4yuyMzohGnXIs8-UO33xLkPpK1GvxfF3PWYfZDQCtW_HOMUMJKJS0O46IPAnbOilPWeKs4"/>
+<p class="text-white text-sm font-semibold">Alex G.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A pair of red and black sneakers on a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLiaS9YjHeBTIgu1y0ghnlZUruhuoWu-mT3OwtyjPpHeOacFDVXLP5LjYAHTf26Qsj_ZQkrxKcMUx4oMGJ8XGBEJS0Ca4rA2Cb35nYcxzCqsazR9TDXE39kcg7Dcuu98JrqUb_ehK6TKJ-ENoO6-zwHORL5a_J1h4tCgKft-plfXdcvf2k0ZcCvCXBfZ39YNV_1vNZFN1rAMCjTq6sk0HrBfbJw6b6J07uXrASRfI8wdS-QjAAMDkZqE6CZOdfANiIoGe9AP3YKFq3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Sarah L." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcAyu_LiAi7a8O40Z4GkuRT7dHJQGY3d1hCxl1_pOTo3pjs7TH5u_TWgJQdE0Ch-q8B8gYLTIPknnAydfcQwIFzs7KUemSFG5NLcCRVqaNZ8Ri8M1WnRtiT6Veu8W8x2KEenOZGx31KntGSqgf9YWFEbn0WVtFZ6L-6tqQ0Wjbla-_IdO-NrdPOQeihOu2d7I8du6gZ6p09hQuUHuVrgDMgpUSUh_MV5ds8a097WbwbN3dr5-VQyilsNB49mEDTnQQ2udwDgsXgVg8"/>
+<p class="text-white text-sm font-semibold">Sarah L.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A person surfing a large wave in the ocean." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAst3A55qs6HI68zvlrWgflvYh0K-aILw3RPhV--44BjRlej2oe70q6YUxj1H8Pi3FplAs0AgD30jtD0IbQ29Fgu6YH6GSor2DMy7wPpJE6lWObe9GqzhqoffauQspdSPZMykRMK_3eeKNKoQtx_6dn2lMhWyvegucu9QKyDJoJmSSvMG3xIp9whcRnZGt5EF6Wkw80TCq6Kxy1NRl9dKP1ar21VW2SSiuJxfRHRYqeDScxfMJ3js-Dhna1L9BQwjdk8ns8U_4wt6-x"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Mike R." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8UIl-O9l5hVpMnPA_EwY76j5PvJuRBKMozDhwWOShh3PqE79xngcm4FcgLUdFOMibheWHYGDxCpDo0lzlcEStGEFIOOjgwOslNDFzqMEQEq42J-Mh49UR4pApnXvb2b_4dg47-odBwRxE-Rxzcq-M0jHzsk8-nh683bQsZ8WFDX7ke-gfQlkQZFY6mksUqRHJdiYWXx4kycEc9XEtG1UMqVhLxCWikmKRJb4J2KZql4YImoQghskH9wpt8045N3GR5f4qDlWU_imZ"/>
+<p class="text-white text-sm font-semibold">Mike R.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A top-down view of a delicious brunch spread." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpkh93fVJxUTIzTy4IWhhf0HYjEF3ENnGQ7dx7mZfE5TtM2mYuvDw11oaB53pOqld9G-NSUwxNISZNu0Om4mT3wpPppkPwP6wezi1NSn4LUQ6AFMFTNGIc4OhBTI-mhaeg4sVqy2Fz_HCXbLtNsvkpWfJXlpPNJJIKERkeF3vmvo1mJtCnYdek2oqUk56SG5RNUWTSPlRLdLKMWRSwTJa6AbwCOiZBP4bpTien1CSSLWYHTxsp1Rf7-JjldCxWBfIWWC5FFchMI_rg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Emily K." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvlB9H91De0A5s8yO-Uw18qahEcF9wDVFnClSAdOdtFUWOi3pSdVGFu6-CgrL95w39ksRi3rn_F4eD-cB4eGb5aXh_cJiJM5jR1oLkObjE5VMDdf7THnxX7rxXYfW7_s3Vkpt7BLaTNOLAgmxczVW3HEPXWHiTrO3VWdx_mcy9rnxgrrPlq2tLaQ_z-1pOjirx94bddy9ikrI_kU7F-eX8NZONLs-nwqAnpyUlBe9QA1VMHRdnW77gjMPypbYzKs4fHOiymlR6L1Vv"/>
+<p class="text-white text-sm font-semibold">Emily K.</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A majestic mountain range with a lake in the foreground." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRPknFYFTZx7neGI-_417Xcq5orlCq1Zl-oq_3c90QB4Jv5_EFtDTkIAOc5kdBeSszlQUwzI8CVlMGHKrlgb4V4GmM-KNg125zwUQqOnmsmKDaGe9TnGqUWhEKlBbdF413DZnBwBEQVTQ5cSUqjuAqsUuilYEUom9tPy1OLMmMD054YpSbM9tlrCaZTnZgWnPX8pUgYPOPZgPa5kQupPfZ_SOZMip4VZm16Q2WipWjsi4PRofTUkiber53CqOgDPR5NhtkTPyasK1a"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of David Chen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQtt154YOfWoANT0QmHGM8GOmrZc_q9ubrZ5mioX-ANK5iGM37KeJxPHsGGN9s24EN7oAPzyIaatJ6RDIG02kdHzBbwxTBqxPKhea6WJIwDB5t2vg7b1Vw0h4zBvDv5-tB5oJzaoq7nDH5HAYyNYsBKHHb2DNrdl1c8Jyegnk1Thou8Vb9XYCNpVv-a6-zue6a0cler1oEyN7D6vLFyqjO7hvsGlpCqaA16Mbw5IcwN1JFuwmZMN4aZEJ0No0vwq8yqgWBHgYB69hw"/>
+<p class="text-white text-sm font-semibold">David Chen</p>
+</div>
+</div>
+</div>
+<div class="mb-6 break-inside-avoid group cursor-pointer">
+<div class="relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+<img class="w-full h-auto" data-alt="A dark and moody image of a circuit board." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9lYmqtreI3xqtzhxoTMvXEk9uE6UPbJ5mmFj1WMwhpUblP0Ao9GbvWZOhW22ZTmo21MKp0iLQl30kkWL_gUIXJrYC1yEms_hkzrxrA-RJ939oqa5RQgy6BLYCuNiS-vtSckaCW_pB4-w-G-L7Cr16ozd0DDpjd6rUUNkG3XwrKPcAb1FRFeijP2vfeSyXyLf5im-l7h6ilbOcPLBUrtskVvbSGsY88MyuDHrbElW4F4bTdl4vLZBDZUMAXEUjq7YAp-5Nfz3nbIbW"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border-2 border-white" data-alt="Avatar of Aisha B." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB06zar6LypVithDaxnNk3ZpuzsEfzvn6TXmRrP5GcKrkd-Sqi582wmr7TbQXgK8MsLP5kCBpaAdaL5M_klCpqFwyVDOUPpG6jO1rL3A9T1WJ-9CRRAN8iNj18IJnhM7w5eCsl1TzpwXntXurD6oeN18RizjOQu1oGx15le059hkMveKfa92QuAA79Klto1ceeZ2EJh21u_8j73_d3uAP7ExwdoH80rmMm7sbYVRrJg6IDdhNQfE8ns8ODdgrVow9Anp-xeT7OZwgRB"/>
+<p class="text-white text-sm font-semibold">Aisha B.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SocialX Notifications Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0066ff",
+              "background-light": "#f5f7f8",
+              "background-dark": "#0f1723",
+              "accent": "#00C2A8",
+              "dark": "#0F172A",
+              "muted": "#64748B",
+              "card": "#FFFFFF",
+              "card-dark": "#1e293b",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-slate-200 dark:border-b-slate-800 px-4 sm:px-10 py-3 bg-card dark:bg-card-dark sticky top-0 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-dark dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-dark dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">SocialX</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-muted flex border-none bg-background-light dark:bg-background-dark items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-dark dark:text-white focus:outline-0 focus:ring-0 border-none bg-background-light dark:bg-background-dark h-full placeholder:text-muted px-4 pl-2 text-base font-normal leading-normal" placeholder="Search" value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4 sm:gap-6">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Home</a>
+<a class="text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Explore</a>
+<a class="text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Messages</a>
+<a class="text-primary dark:text-primary text-sm font-bold leading-normal" href="#">Notifications</a>
+</nav>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-background-light dark:bg-background-dark text-dark dark:text-white text-sm font-bold leading-normal tracking-[0.015em] min-w-0">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDqk0VNkKO5JJ5ycUSImbQlSdfvz6gBndXygqdg8JjG9f-MmVJOjf4HHePU26af7p8DdnhUDaJiownSqGT82HA5U0VKpLEC5m4gVInvIAzoKCyvZJUcJ1gFK7s3z-rbUaaZigmD03HYq4JaSPhm_cbB43Fdqwcsq1NpAO6GflGdWLyYjE6xiE5u5d5Da8Q4YHmbuwdok6DMkv4ItTPBbK4BJuprBWw2U1NCY8rXHrAoYGmnGkou1gtkq2n45QhdycMvkghuQpKnM1DR");'></div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-5 px-4 sm:px-6 md:px-8">
+<div class="layout-content-container flex flex-col w-full max-w-3xl flex-1">
+<div class="flex flex-wrap justify-between items-center gap-3 p-4 mb-4">
+<p class="text-dark dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Notifications</p>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent text-primary text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/10">
+<span class="truncate">Mark all as read</span>
+</button>
+</div>
+<div class="flex flex-col gap-8">
+<!-- Today Section -->
+<div>
+<h3 class="text-muted text-sm font-semibold uppercase tracking-wider px-4 mb-3">Today</h3>
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="flex items-center gap-4 px-5 min-h-[72px] py-3 justify-between hover:bg-background-light dark:hover:bg-background-dark cursor-pointer border-b border-slate-200 dark:border-slate-800 relative">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full"></div>
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Aaron's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD9KLLNRx66T5SjzE1oEh1vcqWIwwhwS2K6BSlv88s27Cv8Isrg5s33BeTGG93IiPt_1J84Qeg95_rtTh6Bw7CJiDokapxCgjVLTPNBhSNEOC-t29g7svOGeucm5tw3ovAgDUKABkzKscTmTcpTEwNnB41kJNqTsX8Dp7KEUWDD_N9TxTIsZMkaLxByBmqtGerPv0b6omBmjI2IcLf6m0yLw2aSbcupHavjyh3nhTs2hUzt5dxpSCTYFo7QMgsRMouShjXEjxyigJkG");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-dark dark:text-white text-base font-medium leading-normal"><span class="font-bold">@aaron</span> liked your post.</p>
+<p class="text-muted text-sm font-normal leading-normal">2h ago</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="text-red-500 flex size-7 items-center justify-center">
+<span class="material-symbols-outlined !text-2xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 px-5 min-h-[72px] py-3 justify-between hover:bg-background-light dark:hover:bg-background-dark cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Brian's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDMMZLrXN2c0h67KSW_IBV73dJ668oY-NgHRFXKn9l__E740yNG8mAfK30HgmjJb4gOyqyiy3uRfV25eNseC51j6kqFEdCE5RZ81gwjnBbm5-KdiHrEKnNdYZiM8GdkWRZhzPbmauMfSwZHz_IdGLxD4NEPW3atKmKAo9aub7Y4YHC3l8V7qpGjai3A2oEorcIJ36CLoSSvVCT7IxbZHREIn6ZzppRQb53Aap3cv_mClaRvsC_rTZu9Wl5Memjo2auiRgezdBa5gjEb");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-dark dark:text-white text-base font-medium leading-normal"><span class="font-bold">@brian</span> started following you.</p>
+<p class="text-muted text-sm font-normal leading-normal">5h ago</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="text-primary flex size-7 items-center justify-center">
+<span class="material-symbols-outlined !text-2xl">person_add</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Yesterday Section -->
+<div>
+<h3 class="text-muted text-sm font-semibold uppercase tracking-wider px-4 mb-3">Yesterday</h3>
+<div class="flex flex-col bg-card dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="flex items-center gap-4 px-5 min-h-[72px] py-3 justify-between hover:bg-background-light dark:hover:bg-background-dark cursor-pointer border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Casey's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC1aG13yxfD_MqkH1kYJKIHp0gixs126RFsBBxbXc5gbmDrC-7Ys_3VHKqB0-NL6IQOqSOw2yEJxHfv7k8l1x74gxshpM7xOMu6h95Ft2SgvyDInh969cT-aiPdUmS9S1q-_xQKbKZPYzkTMaIOfgKD7m-6Q7FYUoM0x1hqF-ANawnbPc6HjXLBl335EKsRpzNq0SnkQFeL3xzcIMJV5fBDNpggNsaOANG1eFbNsKySqDG-MyGP1es3mE-C46OUiV8LoAUOO8VrlvAb");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-dark dark:text-white text-base font-medium leading-normal"><span class="font-bold">@casey</span> commented on your post: "This is amazing!"</p>
+<p class="text-muted text-sm font-normal leading-normal">18h ago</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="text-accent flex size-7 items-center justify-center">
+<span class="material-symbols-outlined !text-2xl">chat_bubble</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 px-5 min-h-[72px] py-3 justify-between hover:bg-background-light dark:hover:bg-background-dark cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="Diana's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBYG62L1xu_fklUa3xdyh9cH_hoi4pHTR-0k20uDtRuiI86K2FsdGk3kab79BAgRzvkY3X3AcqHEmQQxCOyiATT990mfiEgAUPaLAqbPSomrY4nKgBfVJXph7eb0RuCCAtYaRqxR7FqnjE_owtlZtxtWOayt4jrvRQ2gMDe21oDG-law9V9o6BoHsvNqScYP6jyV5a1t4FoxvNYCjd9rIvPra30K2tHnQ4_sG_0QnmMLbcQ2wcDlADsk1l_9lgDZd6_5jXWWQeJCrXz");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-dark dark:text-white text-base font-medium leading-normal"><span class="font-bold">@diana</span> mentioned you in a comment.</p>
+<p class="text-muted text-sm font-normal leading-normal">22h ago</p>
+</div>
+</div>
+<div class="shrink-0">
+<div class="text-purple-500 flex size-7 items-center justify-center">
+<span class="material-symbols-outlined !text-2xl">alternate_email</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Example (can be conditionally shown) -->
+<!-- 
+                        <div class="text-center py-20 px-6 bg-card dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="mx-auto w-fit bg-primary/10 rounded-full p-4 text-primary mb-6">
+                                <span class="material-symbols-outlined !text-5xl">notifications_off</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-dark dark:text-white mb-2">All Caught Up!</h2>
+                            <p class="text-muted max-w-sm mx-auto">You have no new notifications right now. We'll let you know when there's new activity.</p>
+                        </div>
+                        -->
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

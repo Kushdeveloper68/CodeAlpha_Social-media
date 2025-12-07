@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SocialX Home Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0066ff",
+              "background-light": "#f5f7f8",
+              "background-dark": "#0f1723",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "1rem",
+              xl: "1.5rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0F172A] dark:text-gray-200">
+<div class="relative min-h-screen w-full">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex h-16 items-center justify-center border-b border-gray-200/80 bg-white/80 dark:border-gray-800/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<nav class="flex w-full max-w-screen-xl items-center justify-between px-4 md:px-8">
+<div class="flex items-center gap-4">
+<div class="text-primary size-7">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tighter text-[#101418] dark:text-white">SocialX</h1>
+</div>
+<div class="hidden flex-1 justify-center md:flex">
+<label class="relative w-full max-w-md">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-gray-400"> search </span>
+</div>
+<input class="form-input block w-full rounded-full border-transparent bg-gray-100 py-2 pl-10 pr-4 text-[#101418] placeholder:text-[#64748B] focus:border-primary focus:bg-white focus:ring-1 focus:ring-primary dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus:bg-gray-900" placeholder="Search SocialX" type="search"/>
+</label>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-transparent text-[#64748B] hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined"> notifications </span>
+</button>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-transparent text-[#64748B] hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined"> chat_bubble </span>
+</button>
+<div class="ml-2 h-10 w-10 rounded-full bg-cover bg-center" data-alt="User's profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvKwPk-xXZ2_gyQ6YmoWIHdrc68lZOLyMw-invNC0fZqPCFOOlj4St0_XnHmRXO97tFG59JWocH7K2WhZFk-RxcujDVBZ-8P--dFNDu4BgVhPV5_3JALo3qs2mpjQIIztyJ6L0fK0s6c_pPJEpSCN1Wf2_fRt82NTHaP3qaJG2cudm6PgAy7Sh9N3uf3HhUqsHB5ilaUQR_00dFd7RYKWZyygcSjwrlqNe_0_wKHdJpz89wLhc5acAOCXtcg_KgrZ6TYMUjR6LH50o");'></div>
+</div>
+</nav>
+</header>
+<!-- Main Content -->
+<main class="mx-auto flex w-full max-w-screen-xl gap-8 px-4 py-8 md:px-8">
+<!-- Feed Column -->
+<div class="w-full flex-1 max-w-[760px] space-y-6">
+<!-- Composer -->
+<div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<div class="flex items-start gap-4">
+<div class="h-12 w-12 shrink-0 rounded-full bg-cover bg-center" data-alt="Current user's profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuxfaV_6kPG-s429fZyw9f2FLLpgbx13ObE3-FUAjCz6dt42tzl3fDj7UUfbvPaJa7rsqen7Ds23DEnuwxlDymxNc5G6dE021mE2cUdXCplbzs4pC8LTPL9eap4htTY22gLXW06fb0WXctwraFtf-u6brPrNA23gzIuFR2_E2Z6YZlS2a3Hhk0qgj5P7-3XFzbywe-Tob7iapuOsd4O0eptjOk9WF3Mm3HcUGIuSlJSjQ3aRPtxNJ4R7d1W9S7aoin3N36-3ucc26y");'></div>
+<div class="flex-1">
+<textarea class="form-textarea w-full resize-none border-0 bg-transparent p-0 text-lg text-[#101418] placeholder:text-[#64748B] focus:ring-0 dark:text-gray-200 dark:placeholder:text-gray-500" placeholder="What's on your mind?" rows="3"></textarea>
+<div class="mt-2 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700">
+<div class="flex items-center gap-1">
+<button class="flex h-9 w-9 items-center justify-center rounded-full text-[#64748B] hover:bg-primary/10 hover:text-primary dark:text-gray-400 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined"> image </span>
+</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-full text-[#64748B] hover:bg-primary/10 hover:text-primary dark:text-gray-400 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined"> smart_display </span>
+</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-full text-[#64748B] hover:bg-primary/10 hover:text-primary dark:text-gray-400 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined"> location_on </span>
+</button>
+</div>
+<button class="h-9 cursor-pointer rounded-full bg-primary px-5 text-sm font-bold text-white transition-opacity hover:opacity-90">Post</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feed Posts -->
+<!-- Card 1 -->
+<div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<div class="p-4">
+<div class="flex items-start gap-3">
+<div class="h-12 w-12 shrink-0 rounded-full bg-cover bg-center" data-alt="User's profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDT0D8KLfQ654Td-QNbD_f5AEOwXmLfw6Os8IOXp4oPvNv3kvuksCsHxa_LhypkSRJJTr7E60lM3w8lo9AEKB2cQs5pavx96GO3PqV9mFJnHnYB8kbtjfHOMDbEe5yWAiuRvPGJHbpWvbrC2PtmrMSGiwOK4RffYzAAPwqRftckIyGnk5YqfWHLFI5in2hEzX43JpXGJbk9Dto_rX-wAVQOsmzQRL89IHog6Z7x2H7CF_4hmZgaBFSJd-LX6ocrsc_rc2EIHI4uHtja");'></div>
+<div class="flex flex-1 flex-col">
+<div class="flex items-baseline gap-2">
+<p class="font-bold text-[#101418] dark:text-white">Username</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">@username • 2h</p>
+</div>
+<p class="mt-1 text-base text-[#101418] dark:text-gray-300">This is a sample post on SocialX. It's a great place to share updates with your friends and followers! #socialmedia</p>
+</div>
+</div>
+</div>
+<div class="w-full aspect-video bg-cover bg-center" data-alt="Scenic landscape with mountains and a lake" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCN891wOCZlv0t1z2JXA-DRX9bL1_D6KfKk7-aiL9RQNlcliQBWrJRLn3JInbIN4zphkTkc1Y6tPrDygeo_VA84xExqKRiyQQ33YyqY4RULisPK9L_zbe7BCwB9AB8CsAln159CC6hhYhrQcse7kp3NHv8Nsy3WLua3v4YJJynLMPdGmqc-x3fq3CO_zPUvZtU5VxsMLHk0bzs8Ny6-dNrW1Un8wggkI1dcLak7yPodSH3lOE7_rGU9wMM-_IlsZ2NXYx7jb9gkTmbD");'></div>
+<div class="flex items-center justify-around px-4 py-1 text-sm text-[#64748B] dark:text-gray-400">
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> favorite </span>
+<span class="text-xs font-bold">1.2k</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> mode_comment </span>
+<span class="text-xs font-bold">234</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> repeat </span>
+<span class="text-xs font-bold">98</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> ios_share </span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<div class="p-4">
+<div class="flex items-start gap-3">
+<div class="h-12 w-12 shrink-0 rounded-full bg-cover bg-center" data-alt="Another user's profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB5HxLdIzuEIi4WE3TCa0Jwu7dW7k1E2FoPz5qjWirrr-57zVof40va4tTmSYwtxO1A7ev09pZkKuR-suzsdpVZccHhvvTKgbwBPuLKasT3qDp2chI1ObQPH_tv9HZif8RfZ7jmdApZGnySJan5dboorco4hB0VWLQ6UNwgCgOvEFBxVq6AW5rdF0WOj8Zz8jU4XAfNNnwMWgsNGmrdABholBHieklu0K_FT68iHc4gXERh9c2nNfsPCvB5JnHi9H_nxP-Qoi-FwkoK");'></div>
+<div class="flex-1">
+<div class="flex items-baseline gap-2">
+<p class="font-bold text-[#101418] dark:text-white">Another User</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">@anotheruser • 5h</p>
+</div>
+<p class="mt-1 text-base text-[#101418] dark:text-gray-300">Just discovered this amazing new coffee shop. The latte art is incredible! ☕️</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-around px-4 py-1 text-sm text-[#64748B] dark:text-gray-400">
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> favorite </span>
+<span class="text-xs font-bold">876</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> mode_comment </span>
+<span class="text-xs font-bold">102</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> repeat </span>
+<span class="text-xs font-bold">45</span>
+</button>
+<button class="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-xl"> ios_share </span>
+</button>
+</div>
+</div>
+<!-- Skeleton Loader -->
+<div class="animate-pulse rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<div class="flex items-start gap-3">
+<div class="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+<div class="flex-1 space-y-3">
+<div class="grid grid-cols-3 gap-4">
+<div class="col-span-1 h-3 rounded bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<div class="h-3 rounded bg-gray-200 dark:bg-gray-700"></div>
+<div class="h-3 rounded bg-gray-200 dark:bg-gray-700"></div>
+</div>
+</div>
+<div class="mt-4 h-64 w-full rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<!-- Infinite Scroll Sentinel -->
+<div class="h-1 w-full" id="infinite-scroll-sentinel"></div>
+</div>
+<!-- Right Sidebar -->
+<aside class="hidden w-[360px] shrink-0 space-y-6 lg:block">
+<!-- Suggested Users -->
+<div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<h2 class="text-lg font-bold text-[#101418] dark:text-white">Who to follow</h2>
+<div class="mt-4 space-y-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Suggested user profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_ZBNkA8ymjRJHJpZZPpLz8vMgmAmPj-1k--HM0TV-no1UR0qXtBv9-HbETFKYxbMN0xJzng65sMNe3w_-nHpBLHIMu7ANBwU9Mey8EuSyFDJT1yj21Qs1nkL2-hyD3lKqlKibXA8NZ0gI7W1Kxk_KDl1uU8821p28CHUdZIu53l8MTNQuAtDZhPDWWitcdPoxOEQztbevYtQedDzSpZFM1PKe3ZZ_hoCPvmtc_J0VZgfVcURrOowMmR1OSovEqkTDDbX83eefAtbX");'></div>
+<div class="flex-1">
+<p class="font-bold text-[#101418] dark:text-white">CreativeMind</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">@creativemind</p>
+</div>
+<button class="h-8 rounded-full bg-black px-4 text-sm font-bold text-white dark:bg-white dark:text-black">Follow</button>
+</div>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Suggested user profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA2BxAv1vr0TD5qb-J-Zpf_HWdTN5g4w5YrDkbOcB2BjkTfNPT4FRAV6Wd_dl9zuXo6SU_coTlnaQbx0_-MUOQFsZSA4Wf1qrbwwHowht4sy9QYkKpOyEbEJXId-CtmwD01kKrkfpnR6Cu3ZNqvdWQC8vN5jw0Sen0_sNnSCHtQP4iu9XzGkirDyJ9OzZYCG3ZkZ1gavGgrfXJgOIsNsVDMYUgsfS9v6F9kHm0LRutKUKpUKXe_7UfrjDbzncpXCF9YNJOGQxVwqA3a");'></div>
+<div class="flex-1">
+<p class="font-bold text-[#101418] dark:text-white">TechGuru</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">@techguru</p>
+</div>
+<button class="h-8 rounded-full bg-black px-4 text-sm font-bold text-white dark:bg-white dark:text-black">Follow</button>
+</div>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Suggested user profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL8T1wD1MRrT_piY7lZffbqJxTtnEsys-OZ1-x6ZfBifIVE_8_NT6F2tiSReHP0nvgkj5qDoF3L4DRScD_G_yzBiw35Fdhxuhz_v1vyQO73SnDPu21ccvQthiaYZ_84XNhRCm0PziFIF_zwFsGKAC7Ow_HhmFbzPDO1uCt-LsfHfeivJZzR2AzRSP-szLStqT9wLVBNzK_ybt-kkdM3IwN6e1fngps96xhbRGjzoOxjK3TSlDmeHeM0qxdRpm0GVDmvzd7zedy47CV");'></div>
+<div class="flex-1">
+<p class="font-bold text-[#101418] dark:text-white">TravelBug</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">@travelbug</p>
+</div>
+<button class="h-8 rounded-full bg-black px-4 text-sm font-bold text-white dark:bg-white dark:text-black">Follow</button>
+</div>
+</div>
+<a class="mt-4 block text-sm font-medium text-primary hover:underline" href="#">Show more</a>
+</div>
+<!-- Trending Topics -->
+<div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+<h2 class="text-lg font-bold text-[#101418] dark:text-white">Trending Topics</h2>
+<div class="mt-4 space-y-3">
+<div>
+<p class="text-sm text-[#64748B] dark:text-gray-400">1 · Trending</p>
+<p class="font-bold text-[#101418] dark:text-white">#WebDesign</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">21.5k posts</p>
+</div>
+<div>
+<p class="text-sm text-[#64748B] dark:text-gray-400">2 · Trending</p>
+<p class="font-bold text-[#101418] dark:text-white">#FutureOfAI</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">18.2k posts</p>
+</div>
+<div>
+<p class="text-sm text-[#64748B] dark:text-gray-400">3 · Trending</p>
+<p class="font-bold text-[#101418] dark:text-white">#MondayMotivation</p>
+<p class="text-sm text-[#64748B] dark:text-gray-400">15k posts</p>
+</div>
+</div>
+<a class="mt-4 block text-sm font-medium text-primary hover:underline" href="#">Show more</a>
+</div>
+</aside>
+</main>
+</div>
+</body></html>
