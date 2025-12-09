@@ -264,6 +264,7 @@ const { authToken } = useAuth();
                 [String(followersCount || 0), "Followers"],
                 [String(followingCount || 0), "Following"],
               ].map(([value, label]) => (
+              
                 <div
                   key={label}
                   className="flex min-w-[111px] flex-1 basis-[fit-content] flex-col gap-1 p-3 items-start"
@@ -272,6 +273,9 @@ const { authToken } = useAuth();
                     border: "1px solid #e2e8f0",
                   }}
                 >
+                   <Link
+                to={`/followers-following/${profile?.username}`}
+               >
                   <p
                     className="text-2xl font-bold"
                     style={{ color: "#0F172A" }}
@@ -286,7 +290,9 @@ const { authToken } = useAuth();
                       {label}
                     </p>
                   </div>
+                  </Link>
                 </div>
+                
               ))}
             </div>
           </div>
