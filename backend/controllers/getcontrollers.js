@@ -139,8 +139,37 @@ async function getProfileByUsername(req, res) {
   }
 }
 
+// Add this function to backend/controllers/getcontrollers.js
+
+// GET current logged-in user (protected route - requires jwt middleware)
+async function getCurrentUser(req, res) {
+  try {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const user = await userModel.findById(userId).select('-password').lean();
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const userPublic = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar || '',
+      bio: user.bio || '',
+      links: user.links || {},
+      createdAt: user.createdAt
+    };
+
+    return res.status(200).json({ success: true, user: userPublic });
+  } catch (error) {
+    console.error('getCurrentUser error:', error);
+    return res.status(500).json({ success: false, message: 'Error fetching user', error: error.message });
+  }
+}
+
 module.exports = {
   getAllPosts,
   getCommentsForPost,
-  getProfileByUsername
+  getProfileByUsername,
+  getCurrentUser
 };

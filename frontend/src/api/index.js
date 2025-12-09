@@ -131,4 +131,30 @@ export const getCommentsApi = async (postId) => {
     return error.response?.data || { success: false, message: 'Failed to fetch comments' };
   }
 };
+
+// GET current logged-in user (protected)
+export const getCurrentUserApi = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.get('/api/get/me', { headers });
+    return response.data;
+  } catch (error) {
+    console.error('getCurrentUserApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch current user' };
+  }
+};
+
+// UPDATE profile (username, bio)
+export const updateProfileApi = async ({ username, bio }) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.put('/api/user/update', { username, bio }, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('updateProfileApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to update profile' };
+  }
+};
 export default API;

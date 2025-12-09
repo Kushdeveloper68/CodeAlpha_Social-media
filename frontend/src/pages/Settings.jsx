@@ -1,6 +1,114 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUserApi, updateProfileApi } from "../api";
 
 const SettingsPage = () => {
+  const { authToken, setToken } = useAuth();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [serverError, setServerError] = useState(null);
+
+  // profile fields
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [website, setWebsite] = useState("");
+  const [avatar, setAvatar] = useState(""); // used for display only
+  const [email, setEmail] = useState("");
+  const [createdAt, setCreatedAt] = useState(null);
+
+  const [saving, setSaving] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+
+  useEffect(() => {
+    // require login
+    if (!authToken) {
+      navigate("/login");
+      return;
+    }
+
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      setServerError(null);
+      try {
+        const resp = await getCurrentUserApi();
+        if (resp && resp.success && resp.user) {
+          if (cancelled) return;
+          const u = resp.user;
+          setUsername(u.username || "");
+          setBio(u.bio || "");
+          setWebsite((u.links && u.links.website) || "");
+          setAvatar(u.avatar || "");
+          setEmail(u.email || "");
+          setCreatedAt(u.createdAt ? new Date(u.createdAt) : null);
+        } else {
+          const msg = (resp && resp.message) || "Failed to load profile";
+          setServerError(msg);
+        }
+      } catch (err) {
+        console.error("load profile error", err);
+        setServerError("Failed to load profile");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authToken, navigate]);
+
+  const handleSave = async () => {
+    if (!username || !String(username).trim()) {
+      window.alert("Username cannot be empty");
+      return;
+    }
+    setSaving(true);
+    try {
+      const resp = await updateProfileApi({ username: username.trim(), bio: bio || "" });
+      if (resp && resp.success && resp.user) {
+        // update localStorage stored user (if app stores one)
+        try {
+          const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+          if (storedUser) {
+            storedUser.username = resp.user.username;
+            localStorage.setItem("user", JSON.stringify(storedUser));
+          }
+        } catch (e) {
+          // ignore
+        }
+        window.alert("Profile updated successfully");
+      } else {
+        const msg = (resp && resp.message) || "Failed to update profile";
+        window.alert(msg);
+      }
+    } catch (err) {
+      console.error("save profile error", err);
+      window.alert("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    if (setToken) setToken(null);
+    navigate("/login");
+  };
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleUploadPhoto = () => {
+    // disabled for now — keep UI but show message
+    window.alert("Profile photo updates are disabled for now.");
+  };
+
   return (
     <div
       className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
@@ -40,8 +148,7 @@ const SettingsPage = () => {
               <div
                 className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
                 style={{
-                  backgroundImage:
-                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDy2aqS_HjJqHm5WZzoOnHOsBbL4YElu1IgBzyZEKEhEBOA7B6MptS3-zqgjI1qHueKE-Z6NeJL094lAs27Bhi_6SobEgsyNCyh_lF67patomdDtNB20R9g4nmClcedkt6xCP5r8xL5mR6WY1EF1Pj_IFdhLS5bmlUKl31AhChIYdJRS1leg_gSC_eguEP4RjldfIy6GwjimSsWg8GAEmwA4u37WLEgYaQQmGKtKnkAVZLv54MvDjwMlJjcj7gDdZlavdU3KEZ42agI")',
+                  backgroundImage: `url("${avatar || "https://via.placeholder.com/150"}")`,
                 }}
               ></div>
               <div className="flex flex-col">
@@ -49,13 +156,13 @@ const SettingsPage = () => {
                   className="text-base font-medium leading-normal"
                   style={{ color: "#101418" }}
                 >
-                  Alex Morgan
+                  {username || "Your name"}
                 </h2>
                 <p
                   className="text-sm font-normal leading-normal"
                   style={{ color: "#5e718d" }}
                 >
-                  alex.morgan@example.com
+                  {email || "email@example.com"}
                 </p>
               </div>
             </div>
@@ -64,6 +171,7 @@ const SettingsPage = () => {
             <nav className="flex flex-col gap-2">
               <a
                 href="#"
+                onClick={(e) => { e.preventDefault(); /* keep Edit Profile selected visually but no route */ }}
                 className="flex items-center gap-3 px-3 py-2 rounded-lg"
                 style={{
                   backgroundColor: "rgba(0,102,255,0.1)",
@@ -77,30 +185,64 @@ const SettingsPage = () => {
                   Edit Profile
                 </p>
               </a>
-              {[
-                ["shield", "Security"],
-                ["lock", "Privacy"],
-                ["contrast", "Appearance"],
-              ].map(([icon, label]) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg"
-                  style={{ color: "#101418" }}
-                >
-                  <span className="material-symbols-outlined text-2xl">
-                    {icon}
-                  </span>
-                  <p className="text-sm font-medium leading-normal">{label}</p>
-                </a>
-              ))}
+
+              {/* Details (was Security) */}
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); setShowDetails(prev => !prev); }}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg"
+                style={{ color: "#101418" }}
+              >
+                <span className="material-symbols-outlined text-2xl">
+                  info
+                </span>
+                <p className="text-sm font-medium leading-normal">Details</p>
+              </a>
+
+              {/* Logout (was Privacy) */}
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleLogout(); }}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg"
+                style={{ color: "#101418" }}
+              >
+                <span className="material-symbols-outlined text-2xl">
+                  logout
+                </span>
+                <p className="text-sm font-medium leading-normal">Log Out</p>
+              </a>
+
+              {/* Back (was Appearance) */}
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); handleBack(); }}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg"
+                style={{ color: "#101418" }}
+              >
+                <span className="material-symbols-outlined text-2xl">
+                  arrow_back
+                </span>
+                <p className="text-sm font-medium leading-normal">Back</p>
+              </a>
             </nav>
+
+            {/* Details panel (show email, createdAt) */}
+            {showDetails && (
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg" style={{ borderRadius: "0.5rem" }}>
+                <p className="text-sm font-medium" style={{ color: "#101418" }}>Account details</p>
+                <div className="mt-2 text-sm" style={{ color: "#5e718d" }}>
+                  <div><strong style={{ color: "#101418" }}>Email:</strong> {email || '-'}</div>
+                  <div className="mt-1"><strong style={{ color: "#101418" }}>Created:</strong> {createdAt ? createdAt.toLocaleString() : '-'}</div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Logout */}
+          {/* Logout (duplicate bottom area) */}
           <div className="flex flex-col gap-1">
             <a
               href="#"
+              onClick={(e) => { e.preventDefault(); handleLogout(); }}
               className="flex items-center gap-3 px-3 py-2 rounded-lg"
               style={{ color: "#101418" }}
             >
@@ -148,7 +290,7 @@ const SettingsPage = () => {
                     className="bg-center bg-no-repeat aspect-square bg-cover w-24 h-24 rounded-full"
                     style={{
                       backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAw7GlpEbXk8s4yRsQvtQZaXQBBVZl1ms1OnlYsKE8zCKt6mZE3oPyBjkQzEc1F4sHLxlMXaYoTrN_D59QMbAtTCxogZSD2rj1QWcP3Fgal5x7ASAvIwSeFLHwWHb0gVvYQsz8BJZpKhu_UI42MBBaLoZNN3wu9v1ys0jM36XkaqMuVcq3N_66DK_NOUp3fAhyOx9U-6hwhZZ-BxDNPCIbI9gvUOZ6watkT51sWexlO1fbNJ7vL-V6z0Gri4YzzpoO_KW3CUycLiPhJ")',
+                        `url("${avatar || "https://via.placeholder.com/150"}")`,
                     }}
                   ></div>
                   <div className="flex flex-col justify-center">
@@ -167,6 +309,7 @@ const SettingsPage = () => {
                   </div>
                 </div>
                 <button
+                  onClick={handleUploadPhoto}
                   className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto rounded-lg"
                   style={{
                     backgroundColor: "rgba(0,102,255,0.1)",
@@ -208,25 +351,7 @@ const SettingsPage = () => {
 
                 {/* Form grid */}
                 <div className="py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <label className="flex flex-col">
-                    <p
-                      className="text-sm font-medium leading-normal pb-2"
-                      style={{ color: "#101418" }}
-                    >
-                      Display Name
-                    </p>
-                    <input
-                      className="flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-3 text-sm font-normal leading-normal rounded-lg"
-                      defaultValue="Alex Morgan"
-                      style={{
-                        color: "#101418",
-                        backgroundColor: "#ffffff",
-                        border: "1px solid #d1d5db",
-                        outline: "none",
-                      }}
-                    />
-                  </label>
-
+                  {/* Username */}
                   <label className="flex flex-col">
                     <p
                       className="text-sm font-medium leading-normal pb-2"
@@ -236,7 +361,8 @@ const SettingsPage = () => {
                     </p>
                     <input
                       className="flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-3 text-sm font-normal leading-normal rounded-lg"
-                      defaultValue="alex.morgan"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       style={{
                         color: "#101418",
                         backgroundColor: "#ffffff",
@@ -246,7 +372,8 @@ const SettingsPage = () => {
                     />
                   </label>
 
-                  <label className="flex flex-col md:col-span-2">
+                  {/* Bio */}
+                  <label className="flex flex-col">
                     <p
                       className="text-sm font-medium leading-normal pb-2"
                       style={{ color: "#101418" }}
@@ -255,7 +382,8 @@ const SettingsPage = () => {
                     </p>
                     <textarea
                       className="flex w-full min-w-0 flex-1 resize-y overflow-hidden min-h-28 p-3 text-sm font-normal leading-normal rounded-lg"
-                      defaultValue="Creative director, photographer, and travel enthusiast. Capturing moments from around the world."
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
                       style={{
                         color: "#101418",
                         backgroundColor: "#ffffff",
@@ -265,6 +393,7 @@ const SettingsPage = () => {
                     />
                   </label>
 
+                  {/* Website (disabled for future update) */}
                   <label className="flex flex-col md:col-span-2">
                     <p
                       className="text-sm font-medium leading-normal pb-2"
@@ -274,7 +403,8 @@ const SettingsPage = () => {
                     </p>
                     <input
                       className="flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-3 text-sm font-normal leading-normal rounded-lg"
-                      defaultValue="https://www.alexmorgan.design"
+                      value={website}
+                      disabled
                       style={{
                         color: "#101418",
                         backgroundColor: "#ffffff",
@@ -291,6 +421,19 @@ const SettingsPage = () => {
                   style={{ borderColor: "#e5e7eb" }}
                 >
                   <button
+                    onClick={() => {
+                      // revert changes by reloading from server
+                      if (!loading) {
+                        setLoading(true);
+                        getCurrentUserApi().then(resp => {
+                          if (resp && resp.success && resp.user) {
+                            setUsername(resp.user.username || "");
+                            setBio(resp.user.bio || "");
+                            setWebsite((resp.user.links && resp.user.links.website) || "");
+                          }
+                        }).finally(() => setLoading(false));
+                      }
+                    }}
                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-medium leading-normal rounded-lg"
                     style={{
                       backgroundColor: "rgba(0,0,0,0.05)",
@@ -300,17 +443,22 @@ const SettingsPage = () => {
                     <span className="truncate">Cancel</span>
                   </button>
                   <button
+                    onClick={handleSave}
+                    disabled={saving}
                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-medium leading-normal rounded-lg"
                     style={{
                       backgroundColor: "#0066ff",
                       color: "#ffffff",
                     }}
                   >
-                    <span className="truncate">Save Changes</span>
+                    <span className="truncate">{saving ? 'Saving...' : 'Save Changes'}</span>
                   </button>
                 </div>
               </div>
             </div>
+            {serverError && (
+              <div className="mt-4 text-sm text-red-600">{serverError}</div>
+            )}
           </div>
         </main>
       </div>

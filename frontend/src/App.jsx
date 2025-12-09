@@ -26,11 +26,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/explore" element={<ExplorePage />} />
+        {/* <Route path="/explore" element={<ExplorePage />} />  future item */}
         <Route path="/profile/:username" element={<ProfilePage />} />
         <Route path="/post/:postId" element={<PostDetailPage />} />
         <Route path="/create-post" element={<CreatePostPage />} />
-        {/* <Route path="/notifications" element={<NotificationsPage />} /> */}
+        {/* <Route path="/notifications" element={<NotificationsPage />} /> future item */}
         <Route path="/followers-following/:username" element={<FollowersFollowingPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />} />

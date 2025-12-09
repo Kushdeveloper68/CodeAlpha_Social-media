@@ -4,8 +4,7 @@ const postRouter = express.Router();
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-
-const { sendOtp, verifyOtpAndSignup, login, createPost, likePost, createComment } = require('../controllers/postControllers');
+const { sendOtp, verifyOtpAndSignup, login, createPost, likePost, createComment, updateProfile } = require('../controllers/postControllers');
 const jwtMiddleware = require('../middlewares/jwtMilddleware');
 
 // ensure uploads/posts directory exists
@@ -48,4 +47,7 @@ postRouter.post('/posts/:id/like', jwtMiddleware, likePost);
 // add comment to post (protected)
 postRouter.post('/posts/:id/comment', jwtMiddleware, createComment);
 
+
+// Update profile (protected)
+postRouter.put('/user/update', jwtMiddleware, updateProfile);
 module.exports = postRouter;

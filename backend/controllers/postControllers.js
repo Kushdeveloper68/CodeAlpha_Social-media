@@ -279,11 +279,58 @@ async function createComment(req, res) {
     return res.status(500).json({ success: false, message: 'Failed to create comment', error: error.message });
   }
 }
+
+
+// Add this to backend/controllers/postControllers.js
+
+// UPDATE current user's profile (username, bio) - protected
+async function updateProfile(req, res) {
+  try {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const { username, bio } = req.body;
+    if (!username || !String(username).trim()) {
+      return res.status(400).json({ success: false, message: 'Username is required' });
+    }
+
+    const usernameLower = String(username).toLowerCase().trim();
+
+    // Ensure username uniqueness (exclude current user)
+    const existing = await userModel.findOne({ username: usernameLower, _id: { $ne: userId } });
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'Username is already taken' });
+    }
+
+    const updated = await userModel.findByIdAndUpdate(
+      userId,
+      { username: usernameLower, bio: bio || '' },
+      { new: true }
+    ).select('-password').lean();
+
+    if (!updated) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const userPublic = {
+      id: updated._id,
+      username: updated.username,
+      email: updated.email,
+      avatar: updated.avatar || '',
+      bio: updated.bio || '',
+      createdAt: updated.createdAt
+    };
+
+    return res.status(200).json({ success: true, message: 'Profile updated', user: userPublic });
+  } catch (error) {
+    console.error('updateProfile error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to update profile', error: error.message });
+  }
+}
 module.exports = {
   sendOtp,
   verifyOtpAndSignup,
   login,
   createPost,
   likePost,
-  createComment
+  createComment,
+  updateProfile
 };
