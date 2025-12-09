@@ -211,77 +211,7 @@ const HomePage = () => {
       }}
     >
       {/* TopNavBar */}
-      <header
-        className="sticky top-0 z-50 flex h-16 items-center justify-center border-b backdrop-blur-sm"
-        style={{
-          borderColor: "rgba(229,231,235,0.8)",
-          backgroundColor: "rgba(255,255,255,0.8)",
-        }}
-      >
-        <nav className="flex w-full max-w-screen-xl items-center justify-between px-4 md:px-8">
-          <div className="flex items-center gap-4">
-            <div
-              className="size-7"
-              style={{ color: "#0066ff" }} // primary
-            >
-              <svg
-                fill="none"
-                viewBox="0 0 48 48"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </div>
-            <h1
-              className="text-xl font-bold tracking-tighter"
-              style={{ color: "#101418" }}
-            >
-              SocialX
-            </h1>
-          </div>
-
-          <div className="hidden flex-1 justify-center md:flex">
-            <label className="relative w-full max-w-md">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <span className="material-symbols-outlined text-gray-400">
-                  search
-                </span>
-              </div>
-              <input
-                type="search"
-                placeholder="Search SocialX"
-                className="form-input block w-full rounded-full border-transparent py-2 pl-10 pr-4 placeholder:text-[#64748B] focus:ring-1"
-                style={{
-                  backgroundColor: "#f3f4f6",
-                  color: "#101418",
-                  outline: "none",
-                  borderColor: "#0066ff",
-                  boxShadow: "0 0 0 1px transparent",
-                }}
-              />
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-transparent text-[#64748B] hover:bg-gray-100">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-transparent text-[#64748B] hover:bg-gray-100">
-              <span className="material-symbols-outlined">chat_bubble</span>
-            </button>
-            <div
-              className="ml-2 h-10 w-10 rounded-full bg-cover bg-center"
-              style={{
-                backgroundImage:
-                  'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvKwPk-xXZ2_gyQ6YmoWIHdrc68lZOLyMw-invNC0fZqPCFOOlj4St0_XnHmRXO97tFG59JWocH7K2WhZFk-RxcujDVBZ-8P--dFNDu4BgVhPV5_3JALo3qs2mpjQIIztyJ6L0fK0s6c_pPJEpSCN1Wf2_fRt82NTHaP3qaJG2cudm6PgAy7Sh9N3uf3HhUqsHB5ilaUQR_00dFd7RYKWZyygcSjwrlqNe_0_wKHdJpz89wLhc5acAOCXtcg_KgrZ6TYMUjR6LH50o")',
-              }}
-            ></div>
-          </div>
-        </nav>
-      </header>
+     
 
       {/* Main Content */}
       <main className="mx-auto flex w-full max-w-screen-xl gap-8 px-4 py-8 md:px-8">

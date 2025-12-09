@@ -2,7 +2,9 @@ import { useState } from 'react'
 import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import { AuthProvider } from './context/authContext';
+import Layout from './Layout';
 import {
+
   LandingPage,
   LoginPage,
   SignupPage,
@@ -20,6 +22,7 @@ function App() {
   const [count, setCount] = useState(0)
   return (
     <AuthProvider>
+   <Layout>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -36,6 +39,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
+    </Layout>
     </AuthProvider>
   )
 }
