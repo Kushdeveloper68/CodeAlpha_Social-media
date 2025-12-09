@@ -28,7 +28,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         {/* <Route path="/explore" element={<ExplorePage />} />  future item */}
         <Route path="/profile/:username" element={<ProfilePage />} />
-        <Route path="/post/:postId" element={<PostDetailPage />} />
+        {/* <Route path="/post/:userId/:postId" element={<PostDetailPage />} /> future item */}
         <Route path="/create-post" element={<CreatePostPage />} />
         {/* <Route path="/notifications" element={<NotificationsPage />} /> future item */}
         <Route path="/followers-following/:username" element={<FollowersFollowingPage />} />

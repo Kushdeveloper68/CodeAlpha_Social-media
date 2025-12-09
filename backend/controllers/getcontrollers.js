@@ -167,9 +167,65 @@ async function getCurrentUser(req, res) {
   }
 }
 
+// GET list of followers for a username (public)
+async function getFollowersByUsername(req, res) {
+  try {
+    const username = (req.params.username || '').toLowerCase().trim();
+    if (!username) return res.status(400).json({ success: false, message: 'Username is required' });
+
+    const user = await userModel.findOne({ username }).populate({
+      path: 'followers',
+      select: 'username avatar createdAt'
+    }).lean();
+
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const followers = (user.followers || []).map(f => ({
+      id: f._id,
+      username: f.username,
+      avatar: f.avatar || '',
+      createdAt: f.createdAt
+    }));
+
+    return res.status(200).json({ success: true, followers });
+  } catch (error) {
+    console.error('getFollowersByUsername error:', error);
+    return res.status(500).json({ success: false, message: 'Error fetching followers', error: error.message });
+  }
+}
+
+// GET list of following for a username (public)
+async function getFollowingByUsername(req, res) {
+  try {
+    const username = (req.params.username || '').toLowerCase().trim();
+    if (!username) return res.status(400).json({ success: false, message: 'Username is required' });
+
+    const user = await userModel.findOne({ username }).populate({
+      path: 'following',
+      select: 'username avatar createdAt'
+    }).lean();
+
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const following = (user.following || []).map(f => ({
+      id: f._id,
+      username: f.username,
+      avatar: f.avatar || '',
+      createdAt: f.createdAt
+    }));
+
+    return res.status(200).json({ success: true, following });
+  } catch (error) {
+    console.error('getFollowingByUsername error:', error);
+    return res.status(500).json({ success: false, message: 'Error fetching following', error: error.message });
+  }
+}
+
 module.exports = {
   getAllPosts,
   getCommentsForPost,
   getProfileByUsername,
-  getCurrentUser
+  getCurrentUser,
+  getFollowersByUsername,
+  getFollowingByUsername
 };

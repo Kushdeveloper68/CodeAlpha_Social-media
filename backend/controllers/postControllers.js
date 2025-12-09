@@ -325,6 +325,82 @@ async function updateProfile(req, res) {
     return res.status(500).json({ success: false, message: 'Failed to update profile', error: error.message });
   }
 }
+
+// POST follow a user (protected)
+async function followUser(req, res) {
+  try {
+    const actorId = req.user && req.user.id;
+    if (!actorId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const targetUsername = (req.params.username || '').toLowerCase().trim();
+    if (!targetUsername) return res.status(400).json({ success: false, message: 'Target username required' });
+
+    const target = await userModel.findOne({ username: targetUsername });
+    if (!target) return res.status(404).json({ success: false, message: 'Target user not found' });
+
+    // don't follow yourself
+    if (String(target._id) === String(actorId)) {
+      return res.status(400).json({ success: false, message: 'Cannot follow yourself' });
+    }
+
+    const actor = await userModel.findById(actorId);
+    if (!actor) return res.status(404).json({ success: false, message: 'Actor user not found' });
+
+    // ensure arrays exist
+    actor.following = actor.following || [];
+    target.followers = target.followers || [];
+
+    // check already following
+    const alreadyFollowing = actor.following.some(f => String(f) === String(target._id) || (f && String(f._id) === String(target._id)));
+    if (alreadyFollowing) {
+      return res.status(200).json({ success: true, message: 'Already following' });
+    }
+
+    actor.following.push(target._id);
+    target.followers.push(actor._id);
+
+    await actor.save();
+    await target.save();
+
+    return res.status(200).json({ success: true, message: 'Now following', followerCount: target.followers.length });
+  } catch (error) {
+    console.error('followUser error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to follow user', error: error.message });
+  }
+}
+
+// POST unfollow a user (protected)
+async function unfollowUser(req, res) {
+  try {
+    const actorId = req.user && req.user.id;
+    if (!actorId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const targetUsername = (req.params.username || '').toLowerCase().trim();
+    if (!targetUsername) return res.status(400).json({ success: false, message: 'Target username required' });
+
+    const target = await userModel.findOne({ username: targetUsername });
+    if (!target) return res.status(404).json({ success: false, message: 'Target user not found' });
+
+    if (String(target._id) === String(actorId)) {
+      return res.status(400).json({ success: false, message: 'Cannot unfollow yourself' });
+    }
+
+    const actor = await userModel.findById(actorId);
+    if (!actor) return res.status(404).json({ success: false, message: 'Actor user not found' });
+
+    actor.following = (actor.following || []).filter(f => !(String(f) === String(target._id) || (f && String(f._id) === String(target._id))));
+    target.followers = (target.followers || []).filter(f => !(String(f) === String(actor._id) || (f && String(f._id) === String(actor._id))));
+
+    await actor.save();
+    await target.save();
+
+    return res.status(200).json({ success: true, message: 'Unfollowed', followerCount: target.followers.length });
+  } catch (error) {
+    console.error('unfollowUser error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to unfollow user', error: error.message });
+  }
+}
+
 module.exports = {
   sendOtp,
   verifyOtpAndSignup,
@@ -332,5 +408,7 @@ module.exports = {
   createPost,
   likePost,
   createComment,
-  updateProfile
+  updateProfile,      // if present
+  followUser,
+  unfollowUser
 };

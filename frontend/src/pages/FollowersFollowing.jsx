@@ -1,6 +1,118 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
+import { getFollowersApi, getFollowingApi, followUserApi, unfollowUserApi } from "../api";
 
 const FollowersFollowingPage = () => {
+  const { username: routeUsername } = useParams();
+  const navigate = useNavigate();
+  const { authToken } = useAuth();
+
+  // UI state
+  const [activeTab, setActiveTab] = useState("followers"); // 'followers' or 'following'
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+
+  // track following action pending for user ids
+  const [pending, setPending] = useState({});
+
+  // viewer's username if available (to disable follow self)
+  const viewerUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user") || "null");
+    } catch {
+      return null;
+    }
+  })();
+  const viewerUsername = viewerUser && viewerUser.username;
+
+  const loadList = async (tab) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (tab === "followers") {
+        const resp = await getFollowersApi(routeUsername);
+        if (resp && resp.success) setFollowers(resp.followers || []);
+        else setError(resp.message || "Failed to load followers");
+      } else {
+        const resp = await getFollowingApi(routeUsername);
+        if (resp && resp.success) setFollowing(resp.following || []);
+        else setError(resp.message || "Failed to load following");
+      }
+    } catch (err) {
+      console.error("loadList error:", err);
+      setError("Failed to load data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // load initial tab when routeUsername changes
+    setFollowers([]);
+    setFollowing([]);
+    setError(null);
+    setLoading(true);
+    loadList(activeTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routeUsername]);
+
+  useEffect(() => {
+    // when tab changes, load
+    loadList(activeTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
+  const handleFollowToggle = async (targetUsername, isFollowing, setListCallback) => {
+    if (!authToken) {
+      navigate("/login");
+      return;
+    }
+    // optimistic UI update
+    setPending((p) => ({ ...p, [targetUsername]: true }));
+
+    try {
+      if (isFollowing) {
+        const resp = await unfollowUserApi(targetUsername);
+        if (resp && resp.success) {
+          setListCallback((prev) => prev.filter((u) => u.username !== targetUsername));
+        } else {
+          window.alert(resp.message || "Failed to unfollow");
+        }
+      } else {
+        const resp = await followUserApi(targetUsername);
+        if (resp && resp.success) {
+          // For a followers list, if we followed someone from following list it's not typical;
+          // easiest approach: mark as following by removing (if we want to reflect status) or leave as-is.
+          // Here we attempt to update the data to reflect new following state by removing the user when in 'following' view,
+          // and leaving in 'followers' view but button will be disabled as we've changed server state.
+          // To keep UI consistent, we'll simply remove the user from the current list if activeTab === 'following' (since you followed someone)
+          setListCallback((prev) => prev.map(u => {
+            if (u.username === targetUsername) return u; // keep object; we don't have per-item following state
+            return u;
+          }));
+          // Optionally you can refresh the list from server
+        } else {
+          window.alert(resp.message || "Failed to follow");
+        }
+      }
+    } catch (err) {
+      console.error("handleFollowToggle error:", err);
+      window.alert("Action failed");
+    } finally {
+      setPending((p) => {
+        const copy = { ...p };
+        delete copy[targetUsername];
+        return copy;
+      });
+      // refresh lists to reflect current server state
+      loadList(activeTab);
+    }
+  };
+
   return (
     <div
       className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
@@ -110,7 +222,7 @@ const FollowersFollowingPage = () => {
                   className="text-3xl font-black tracking-[-0.033em]"
                   style={{ color: "#020617" }}
                 >
-                  John Doe&apos;s Network
+                  {routeUsername ? `${routeUsername}'s Network` : "Network"}
                 </h1>
               </div>
 
@@ -120,27 +232,32 @@ const FollowersFollowingPage = () => {
                 style={{ borderColor: "#e5e7eb" }}
               >
                 <div className="flex px-6 gap-8">
-                  <a
-                    href="#"
-                    className="flex flex-col items-center justify-center border-b-[3px] pb-[13px] pt-4"
+                  <button
+                    onClick={() => setActiveTab("followers")}
+                    className="flex flex-col items-center justify-center border-b-[3px] pb-[13px] pt-4 bg-transparent"
                     style={{
-                      borderBottomColor: "#0066ff",
-                      color: "#0066ff",
+                      borderBottomColor: activeTab === "followers" ? "#0066ff" : "transparent",
+                      color: activeTab === "followers" ? "#0066ff" : "#6b7280",
+                      border: "none"
                     }}
                   >
                     <p className="text-sm font-bold tracking-[0.015em]">
-                      Followers (1,234)
+                      Followers ({followers.length})
                     </p>
-                  </a>
-                  <a
-                    href="#"
-                    className="flex flex-col items-center justify-center border-b-[3px] border-b-transparent pb-[13px] pt-4"
-                    style={{ color: "#6b7280" }}
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("following")}
+                    className="flex flex-col items-center justify-center border-b-[3px] pb-[13px] pt-4 bg-transparent"
+                    style={{
+                      borderBottomColor: activeTab === "following" ? "#0066ff" : "transparent",
+                      color: activeTab === "following" ? "#0066ff" : "#6b7280",
+                      border: "none"
+                    }}
                   >
                     <p className="text-sm font-bold tracking-[0.015em]">
-                      Following (567)
+                      Following ({following.length})
                     </p>
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -162,65 +279,52 @@ const FollowersFollowingPage = () => {
                     </div>
                     <input
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg h-full px-4 pl-2 text-base font-normal"
-                      placeholder="Search for users in your network..."
+                      placeholder={`Search ${activeTab}...`}
                       style={{
                         backgroundColor: "#e5e7eb",
                         border: "none",
                         outline: "none",
                         color: "#020617",
                       }}
+                      onChange={(e) => {
+                        const q = (e.target.value || "").toLowerCase().trim();
+                        if (activeTab === "followers") {
+                          // simple client-side filter
+                          if (!q) loadList("followers");
+                          else setFollowers((prev) => prev.filter(u => (u.username || "").toLowerCase().includes(q) || (u.id || "").includes(q)));
+                        } else {
+                          if (!q) loadList("following");
+                          else setFollowing((prev) => prev.filter(u => (u.username || "").toLowerCase().includes(q) || (u.id || "").includes(q)));
+                        }
+                      }}
                     />
                   </div>
                 </label>
               </div>
 
-              {/* User list */}
+              {/* List area */}
               <div className="divide-y" style={{ borderColor: "#e5e7eb" }}>
-                {[
-                  {
-                    name: "Jane Smith",
-                    handle: "@jane_smith",
-                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpx6EObnzKPpAXJO6uFvOfP-R2JDcSCCss3nSS7wE7RZMJ3pDHALd9vP_bzG16wPcX2-Y6c00-2w3XBpWgk_cZYUtDrbw2RAzikiI-TCBIZO1N066IonjnPHNYrtkmdBVv1b0eYfvU-UAQh8m6HdV7DtabLjEt9UxvJ7lxoYGFnkwIYMrs7_Fhv782dk4RcZu9QJjdB9RxHe6dJPT1hLvxTRoyJNVtZ8ZNSt6Cm9A-zR2AASbb34DjhPc7gI-NzxPvP2p-NZp3f6SY",
-                    button: {
-                      label: "Following",
-                      bg: "#e5e7eb",
-                      color: "#020617",
-                    },
-                  },
-                  {
-                    name: "Mike Johnson",
-                    handle: "@mikej",
-                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCUvacmuGDTMb412_-I1kRWc51Ffoc8UeQcupwI-AzCsUFDk-i8dScJt4cYObkxci2niSs18boPYxWwKuGFdfXpaQKhwQsSRPDDfiFb7GSEaLT_5GZ2x1gUZG6-oeBSwkMfxr7gZgugJbFBauJje-iEg2Z7uq_-cr1Ahwors1WH75BdEYq_d4LaOuhUgRZQenmDscZNvnD4FHfGHEqWUbdXTziJ3wFoQQ3cZ33yyv-BRsJJAQgpYVExfTOsKLtKBvwqdXLnUZs2XfwT",
-                    button: {
-                      label: "Follow Back",
-                      bg: "#0066ff",
-                      color: "#ffffff",
-                    },
-                  },
-                  {
-                    name: "Emily White",
-                    handle: "@emwhite",
-                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB0bSGaHeuVQZvlLpYvWwjzZpNRRgHNl5COUBVaDxIegAOG77rXAneZVQ2AuI54Z_sdwaLsVszRHR5ev4PpgF6lyYk89VZVRgU8EzxsD_IXxJYgiOd4OkKv_4NbEO7WcGn4AlVo_K--B_fD1gAEL54HOkD3fYGNc1JXOJCDgFcpQ4gsiqIDM98XErLGFhFUBI8BZd95-V-KkkWBUEonkEYOKq8VaiFxUMH-QuPmwy7RgSYD9SHsVBOca7PWJYKW4imj2Fqn6QTuCoUA",
-                    button: {
-                      label: "Following",
-                      bg: "#e5e7eb",
-                      color: "#020617",
-                    },
-                    hoverVariant: "unfollow",
-                  },
-                  {
-                    name: "Chris Brown",
-                    handle: "@chrisb",
-                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCdN67mGS1qJ7q-7i6a-RRjPG81MWaj1ElSaJ7GurDHFQ2yFEhRPFIF1U26j3k8BKyx31hoMRgtM3HcTdqs1Yq9jKKRO0LAsryaMWWu2h6bhr-O2DQ6mRNSiNs01QhxHjMj7ZAqv1XnkCFQpKZaf7iC0lDHcQUQQGiy7P3zmqt4Ky-lgA_4hDKeC9S4UF0XV8kUVb7VBM4E4vMtvaMUa0rspt5qdh65c_-uYjN58TkfeX5He0t5sHmHuCoheBDKhf6KEwG0TnEJBBCe",
-                    button: {
-                      label: "Remove",
-                      bg: "#ef4444",
-                      color: "#ffffff",
-                    },
-                  },
-                ].map((user) => (
+                {loading && (
+                  <div className="p-6">
+                    <div className="animate-pulse space-y-3">
+                      <div className="h-4 w-1/3 bg-gray-200 rounded"></div>
+                      <div className="h-12 w-full bg-gray-100 rounded"></div>
+                      <div className="h-12 w-full bg-gray-100 rounded"></div>
+                    </div>
+                  </div>
+                )}
+
+                {!loading && error && (
+                  <div className="p-6 text-sm text-red-600">{error}</div>
+                )}
+
+                {!loading && !error && (activeTab === "followers" ? followers : following).length === 0 && (
+                  <div className="p-6 text-sm text-[#6b7280]">No users found.</div>
+                )}
+
+                {!loading && !error && (activeTab === "followers" ? followers : following).map((user) => (
                   <div
-                    key={user.handle}
+                    key={user.username || user.id}
                     className="flex items-center gap-4 px-6 min-h-[72px] py-3 justify-between"
                     style={{ backgroundColor: "#ffffff" }}
                   >
@@ -228,7 +332,7 @@ const FollowersFollowingPage = () => {
                       <div
                         className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12"
                         style={{
-                          backgroundImage: `url("${user.img}")`,
+                          backgroundImage: `url("${user.avatar || 'https://via.placeholder.com/80'}")`,
                         }}
                       ></div>
                       <div className="flex flex-col justify-center">
@@ -236,45 +340,42 @@ const FollowersFollowingPage = () => {
                           className="text-base font-medium line-clamp-1"
                           style={{ color: "#020617" }}
                         >
-                          {user.name}
+                          {user.username}
                         </p>
                         <p
                           className="text-sm font-normal line-clamp-2"
                           style={{ color: "#6b7280" }}
                         >
-                          {user.handle}
+                          @{user.username}
                         </p>
                       </div>
                     </div>
                     <div className="shrink-0">
-                      {user.hoverVariant === "unfollow" ? (
+                      {/* Button logic:
+                          - hide if showing own entry
+                          - if viewer is already following this user, show "Following" (and allow unfollow)
+                          - otherwise show Follow
+                      */}
+                      {viewerUsername && viewerUsername.toLowerCase() === (user.username || "").toLowerCase() ? (
                         <button
-                          className="flex min-w-[110px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 group"
+                          className="flex min-w-[110px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4"
                           style={{
                             backgroundColor: "#e5e7eb",
                             color: "#020617",
                           }}
                         >
-                          <span className="truncate group-hover:hidden">
-                            Following
-                          </span>
-                          <span
-                            className="truncate hidden group-hover:block"
-                            style={{ color: "#dc2626" }}
-                          >
-                            Unfollow
-                          </span>
+                          <span className="truncate">You</span>
                         </button>
                       ) : (
-                        <button
-                          className="flex min-w-[110px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 text-sm font-medium"
-                          style={{
-                            backgroundColor: user.button.bg,
-                            color: user.button.color,
+                        <FollowButton
+                          targetUsername={user.username}
+                          pending={!!pending[user.username]}
+                          onToggle={(isFollowing) => {
+                            // decide which list state updater to pass
+                            const setList = activeTab === "followers" ? setFollowers : setFollowing;
+                            handleFollowToggle(user.username, isFollowing, setList);
                           }}
-                        >
-                          <span className="truncate">{user.button.label}</span>
-                        </button>
+                        />
                       )}
                     </div>
                   </div>
@@ -293,8 +394,12 @@ const FollowersFollowingPage = () => {
                     color: "#334155",
                     borderColor: "#e5e7eb",
                   }}
+                  onClick={() => {
+                    // simple behavior: fetch current tab again
+                    loadList(activeTab);
+                  }}
                 >
-                  Load More
+                  Refresh
                 </button>
               </div>
             </div>
@@ -392,5 +497,27 @@ const FollowersFollowingPage = () => {
     </div>
   );
 };
+
+function FollowButton({ targetUsername, pending, onToggle }) {
+  // determine current following state: try to infer from viewer localStorage 'user.following' if available
+  let stored = null;
+  try {
+    stored = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {}
+  const isFollowing = stored && Array.isArray(stored.following) && stored.following.some(u => (u.username || u) === targetUsername || (u && (u.username === targetUsername || u === targetUsername)));
+  return (
+    <button
+      onClick={() => onToggle(!!isFollowing)}
+      disabled={pending}
+      className="flex min-w-[110px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 text-sm font-medium"
+      style={{
+        backgroundColor: isFollowing ? "#e5e7eb" : "#0066ff",
+        color: isFollowing ? "#020617" : "#ffffff",
+      }}
+    >
+      <span className="truncate">{pending ? "..." : (isFollowing ? "Following" : "Follow")}</span>
+    </button>
+  );
+}
 
 export default FollowersFollowingPage;

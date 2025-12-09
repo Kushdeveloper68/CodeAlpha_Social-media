@@ -157,4 +157,51 @@ export const updateProfileApi = async ({ username, bio }) => {
     return error.response?.data || { success: false, message: 'Failed to update profile' };
   }
 };
+// GET followers for username
+export const getFollowersApi = async (username) => {
+  try {
+    const response = await API.get(`/api/get/profile/${encodeURIComponent(username)}/followers`);
+    return response.data;
+  } catch (error) {
+    console.error('getFollowersApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch followers' };
+  }
+};
+
+// GET following for username
+export const getFollowingApi = async (username) => {
+  try {
+    const response = await API.get(`/api/get/profile/${encodeURIComponent(username)}/following`);
+    return response.data;
+  } catch (error) {
+    console.error('getFollowingApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch following' };
+  }
+};
+
+// FOLLOW user (protected)
+export const followUserApi = async (username) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.post(`/api/user/${encodeURIComponent(username)}/follow`, {}, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('followUserApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to follow user' };
+  }
+};
+
+// UNFOLLOW user (protected)
+export const unfollowUserApi = async (username) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.post(`/api/user/${encodeURIComponent(username)}/unfollow`, {}, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('unfollowUserApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to unfollow user' };
+  }
+};
 export default API;

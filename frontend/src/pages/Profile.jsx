@@ -1,15 +1,15 @@
 // frontend/src/pages/Profile.jsx
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
-import { useApi } from "../api";
-
+import { useParams, useNavigate , Link} from 'react-router-dom';
+import { useAuth } from '../context/authContext';
+import { useApi, followUserApi, unfollowUserApi } from "../api";
 let PostGridComponent;
 
 const ProfilePage = () => {
   const api = useApi();
   const { username } = useParams();
   const navigate = useNavigate();
-
+const { authToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [profile, setProfile] = useState(null);
@@ -50,16 +50,49 @@ const ProfilePage = () => {
     if (username) fetchProfile();
   }, [username]);
 
-  const handleFollowToggle = () => {
-    // placeholder UX-only toggle (server call can be wired later)
-    if (viewerIsFollowing) {
-      setViewerIsFollowing(false);
-      setFollowersCount((c) => Math.max(0, c - 1));
+  const handleFollowToggle = async () => {
+  
+  
+  // require login
+  if (!authToken) {
+    window.alert("Please login to follow users");
+    navigate('/login');
+    return;
+  }
+
+  // optimistic UI update
+  const wasFollowing = viewerIsFollowing;
+  setViewerIsFollowing(!wasFollowing);
+  setFollowersCount((c) => wasFollowing ? Math.max(0, c - 1) : c + 1);
+
+  try {
+    if (wasFollowing) {
+      // unfollow
+      const resp = await unfollowUserApi(username);
+      if (!resp || !resp.success) {
+        // revert on error
+        setViewerIsFollowing(wasFollowing);
+        setFollowersCount((c) => wasFollowing ? c + 1 : Math.max(0, c - 1));
+        window.alert(resp?.message || "Failed to unfollow");
+      }
     } else {
-      setViewerIsFollowing(true);
-      setFollowersCount((c) => c + 1);
+      // follow
+      const resp = await followUserApi(username);
+      if (!resp || !resp.success) {
+        // revert on error
+        setViewerIsFollowing(wasFollowing);
+        setFollowersCount((c) => wasFollowing ? c + 1 : Math.max(0, c - 1));
+        window.alert(resp?.message || "Failed to follow");
+      }
     }
-  };
+  } catch (err) {
+    console.error('Follow toggle error:', err);
+    // revert on error
+    setViewerIsFollowing(wasFollowing);
+    setFollowersCount((c) => wasFollowing ? c + 1 : Math.max(0, c - 1));
+    window.alert("Action failed");
+  }
+};
 
   const handleEditProfile = () => {
     navigate('/settings');
@@ -280,7 +313,8 @@ const ProfilePage = () => {
                     >
                       <span className="truncate">Edit</span>
                     </button>
-                    <button
+                    <Link
+                      to="/create-post"
                       className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
                       style={{
                         borderRadius: "0.5rem",
@@ -288,8 +322,8 @@ const ProfilePage = () => {
                         color: "#ffffff",
                       }}
                     >
-                      <span className="truncate">Remove message</span>
-                    </button>
+                      <span className="truncate">Create post</span>
+                    </Link>
                   </>
                 ) : (
                   <>
