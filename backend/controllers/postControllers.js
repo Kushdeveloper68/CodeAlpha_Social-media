@@ -204,11 +204,86 @@ async function createPost(req, res) {
   }
 }
 
+// POST like/unlike a post (toggle)
+async function likePost(req, res) {
+  try {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
+    const postId = req.params.id;
+    if (!postId) return res.status(400).json({ success: false, message: 'Post id required' });
+
+    const post = await postModel.findById(postId);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+
+    // likes stored as array of ObjectId (or user ids)
+    const alreadyLiked = post.likes && post.likes.some(u => String(u) === String(userId) || (u._id && String(u._id) === String(userId)));
+
+    if (alreadyLiked) {
+      // remove like
+      post.likes = post.likes.filter(u => !(String(u) === String(userId) || (u._id && String(u._id) === String(userId))));
+      post.likeCount = Math.max(0, (post.likeCount || 0) - 1);
+    } else {
+      post.likes = post.likes || [];
+      post.likes.push(userId);
+      post.likeCount = (post.likeCount || 0) + 1;
+    }
+
+    await post.save();
+
+    return res.status(200).json({ success: true, likeCount: post.likeCount, liked: !alreadyLiked });
+  } catch (error) {
+    console.error('likePost error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to toggle like', error: error.message });
+  }
+}
+
+// POST create a comment for a post
+async function createComment(req, res) {
+  try {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const postId = req.params.id;
+    const { text } = req.body;
+
+    if (!postId || !text || !text.trim()) return res.status(400).json({ success: false, message: 'post id and text are required' });
+
+    const post = await postModel.findById(postId);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+
+    const created = await commentModel.create({
+      postId,
+      userId,
+      text: text.trim()
+    });
+
+    // increment comment count on post
+    post.commentsCount = (post.commentsCount || 0) + 1;
+    await post.save();
+
+    // populate user on comment for response
+    const populated = await commentModel.findById(created._id).populate({ path: 'userId', select: 'username avatar' }).lean();
+
+    return res.status(201).json({
+      success: true,
+      comment: {
+        id: populated._id,
+        text: populated.text,
+        createdAt: populated.createdAt,
+        user: populated.userId ? { id: populated.userId._id, username: populated.userId.username, avatar: populated.userId.avatar || '' } : null
+      }
+    });
+  } catch (error) {
+    console.error('createComment error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to create comment', error: error.message });
+  }
+}
 module.exports = {
   sendOtp,
   verifyOtpAndSignup,
   login,
-  createPost
-  // ...other exported functions can be added here
+  createPost,
+  likePost,
+  createComment
 };

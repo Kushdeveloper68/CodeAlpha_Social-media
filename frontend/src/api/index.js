@@ -82,4 +82,53 @@ export const createPostApi = async (formData) => {
   }
 };
 
+// GET all posts
+export const getAllPostsApi = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.get('/api/get/posts', { headers });
+    return response.data;
+  } catch (error) {
+    console.error('getAllPostsApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch posts' };
+  }
+};
+
+// LIKE POST (toggle)
+export const likePostApi = async (postId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.post(`/api/posts/${encodeURIComponent(postId)}/like`, {}, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('likePostApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to like post' };
+  }
+};
+
+// CREATE COMMENT
+export const createCommentApi = async (postId, text) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.post(`/api/posts/${encodeURIComponent(postId)}/comment`, { text }, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('createCommentApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to create comment' };
+  }
+};
+
+// GET COMMENTS
+export const getCommentsApi = async (postId) => {
+  try {
+    const response = await API.get(`/api/get/posts/${encodeURIComponent(postId)}/comments`);
+    return response.data;
+  } catch (error) {
+    console.error('getCommentsApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch comments' };
+  }
+};
 export default API;

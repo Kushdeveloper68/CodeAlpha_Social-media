@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
-const { sendOtp, verifyOtpAndSignup, login, createPost } = require('../controllers/postControllers');
+const { sendOtp, verifyOtpAndSignup, login, createPost, likePost, createComment } = require('../controllers/postControllers');
 const jwtMiddleware = require('../middlewares/jwtMilddleware');
 
 // ensure uploads/posts directory exists
@@ -34,16 +34,18 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5 MB
 });
 
-// Request an OTP to user's email
+// public/auth routes
 postRouter.post('/send-otp', sendOtp);
-
-// Verify OTP and complete signup
 postRouter.post('/verify-signup', verifyOtpAndSignup);
-
-// Login route
 postRouter.post('/login', login);
 
-// Create a post (protected). Field name for image: 'image'
+// create post (protected) (image field name = 'image')
 postRouter.post('/create-post', jwtMiddleware, upload.single('image'), createPost);
+
+// like/unlike a post (protected)
+postRouter.post('/posts/:id/like', jwtMiddleware, likePost);
+
+// add comment to post (protected)
+postRouter.post('/posts/:id/comment', jwtMiddleware, createComment);
 
 module.exports = postRouter;

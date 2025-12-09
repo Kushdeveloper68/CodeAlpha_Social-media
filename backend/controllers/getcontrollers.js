@@ -1,9 +1,75 @@
 // backend/controllers/getcontrollers.js
 const jwt = require('jsonwebtoken');
-const { userModel, postModel } = require('../models');
+const { userModel, postModel, commentModel } = require('../models');
 
 const JWT_SECRET = process.env.JWTKEY || 'kush123';
 
+// GET all public posts (most recent first). If Authorization Bearer token provided,
+// include `viewerId` and whether viewer liked each post as `viewerHasLiked`.
+async function getAllPosts(req, res) {
+  try {
+    // optional viewer context
+    let viewerId = null;
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, JWT_SECRET);
+        viewerId = decoded.id;
+      } catch (err) {
+        // ignore invalid token
+      }
+    }
+
+    const posts = await postModel.find({ privacy: 'public' }).sort({ createdAt: -1 })
+      .populate({ path: 'userId', select: 'username avatar' })
+      .lean();
+
+    const result = posts.map(p => {
+      const likedByViewer = viewerId ? (Array.isArray(p.likes) && p.likes.some(u => String(u) === String(viewerId) || (u && String(u._id) === String(viewerId)))) : false;
+      return {
+        _id: p._id,
+        user: p.userId ? { id: p.userId._id, username: p.userId.username, avatar: p.userId.avatar || '' } : null,
+        content: p.content,
+        media: p.media,
+        likeCount: p.likeCount || (p.likes ? p.likes.length : 0),
+        commentsCount: p.commentsCount || 0,
+        createdAt: p.createdAt,
+        viewerHasLiked: likedByViewer
+      };
+    });
+
+    return res.status(200).json({ success: true, posts: result });
+  } catch (error) {
+    console.error('getAllPosts error:', error);
+    return res.status(500).json({ success: false, message: 'Error fetching posts', error: error.message });
+  }
+}
+
+// GET comments for a post (public). Populates commenter
+async function getCommentsForPost(req, res) {
+  try {
+    const postId = req.params.postId;
+    if (!postId) return res.status(400).json({ success: false, message: 'postId is required' });
+
+    const comments = await commentModel.find({ postId }).sort({ createdAt: 1 }).populate({ path: 'userId', select: 'username avatar' }).lean();
+
+    const result = comments.map(c => ({
+      id: c._id,
+      text: c.text,
+      createdAt: c.createdAt,
+      user: c.userId ? { id: c.userId._id, username: c.userId.username, avatar: c.userId.avatar || '' } : null
+    }));
+
+    return res.status(200).json({ success: true, comments: result });
+  } catch (error) {
+    console.error('getCommentsForPost error:', error);
+    return res.status(500).json({ success: false, message: 'Error fetching comments', error: error.message });
+  }
+}
+
+
+// existing getProfileByUsername (kept as-is)
 async function getProfileByUsername(req, res) {
   try {
     const username = (req.params.username || '').toLowerCase().trim();
@@ -74,5 +140,7 @@ async function getProfileByUsername(req, res) {
 }
 
 module.exports = {
+  getAllPosts,
+  getCommentsForPost,
   getProfileByUsername
 };
