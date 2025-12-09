@@ -8,7 +8,7 @@ const path = require('path')
 const port = process.env.PORT || 5000
 const { mongodbConnection } = require("./connection/connection.js")
 const postRouter = require('./routes/postRouter');
-
+const getRouter = require('./routes/getRouter');
 
 // middleware to verify JWT token
 
@@ -26,6 +26,7 @@ app.use(cors({
 // connection
 mongodbConnection(process.env.MONGOURL || "mongodb://localhost:27017/socailmedia")
 app.use('/api', postRouter);
+app.use('/api/get', getRouter);
 
 
 

@@ -18,19 +18,19 @@
   },
   "homepage": "https://github.com/Kushdeveloper68/CodeAlpha_Social-media#readme",
   "dependencies": {
-    "express": "^5.1.0",
-    "mongodb": "^7.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "cookies-parser": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "express": "^5.1.0",
     "http": "^0.0.1-security",
     "ipinfo": "^1.5.2",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.0.0",
     "mongoose": "^8.18.0",
-    "multer": "^2.0.1",
+    "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
     "nodemon": "^3.1.9"
   }

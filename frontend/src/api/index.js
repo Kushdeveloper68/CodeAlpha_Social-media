@@ -55,4 +55,17 @@ export const loginApi = async (identifier, password) => {
   }
 };
 
+// GET profile by username (optional auth)
+export const getProfileApi = async (username) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await API.get(`/api/get/profile/${encodeURIComponent(username)}`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('getProfileApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to fetch profile' };
+  }
+};
+
 export default API;

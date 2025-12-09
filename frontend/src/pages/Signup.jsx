@@ -75,7 +75,7 @@ export default function Signup() {
         localStorage.setItem("user", JSON.stringify(res.user));
       }
       setMessage("Signup successful. Redirecting...");
-      setTimeout(() => navigate("/"), 900);
+      setTimeout(() => navigate(`/profile/${res.user.username}`), 700);
     } else {
       setError(res && res.message ? res.message : "Signup failed. Try again.");
     }

@@ -34,7 +34,7 @@ export default function Login() {
         }
         if (res.user) localStorage.setItem("user", JSON.stringify(res.user));
         setInfo("Login successful. Redirecting...");
-        setTimeout(() => navigate("/"), 700);
+        setTimeout(() => navigate(`/profile/${res.user.username}`), 700);
       } else {
         setServerError(res && res.message ? res.message : "Login failed.");
       }

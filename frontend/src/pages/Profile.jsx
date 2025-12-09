@@ -1,6 +1,105 @@
-import React from "react";
+// frontend/src/pages/Profile.jsx
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import { useApi } from "../api";
+
+let PostGridComponent;
 
 const ProfilePage = () => {
+  const api = useApi();
+  const { username } = useParams();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [viewerIsFollowing, setViewerIsFollowing] = useState(false);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      setLoading(true);
+      setError("");
+      try {
+        // use api instance returned by useApi()
+        const res = await api.get(`/api/get/profile/${encodeURIComponent(username)}`);
+        const data = res && res.data ? res.data : res; // depending if axios returns response or data
+        const body = data.success !== undefined ? data : (res && res.data) || res;
+
+        if (body && body.success) {
+          setProfile(body.user || null);
+          setPosts(body.posts || []);
+          setFollowersCount(body.followersCount || 0);
+          setFollowingCount(body.followingCount || 0);
+          setViewerIsFollowing(Boolean(body.viewerIsFollowing));
+          setIsOwnProfile(Boolean(body.isOwnProfile));
+        } else {
+          setError(body && body.message ? body.message : "Profile not found");
+        }
+      } catch (err) {
+        const msg = (err && err.response && err.response.data && err.response.data.message) || err.message || "Error fetching profile";
+        setError(msg);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (username) fetchProfile();
+  }, [username]);
+
+  const handleFollowToggle = () => {
+    // placeholder UX-only toggle (server call can be wired later)
+    if (viewerIsFollowing) {
+      setViewerIsFollowing(false);
+      setFollowersCount((c) => Math.max(0, c - 1));
+    } else {
+      setViewerIsFollowing(true);
+      setFollowersCount((c) => c + 1);
+    }
+  };
+
+  const handleEditProfile = () => {
+    navigate('/settings');
+  };
+
+  if (loading) {
+    return (
+      <div
+        className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
+        style={{
+          backgroundColor: "#F7FAFC",
+          fontFamily: "Inter, sans-serif",
+        }}
+      >
+        <div className="flex items-center justify-center h-64">Loading profile...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    // keep same layout & style but show error area
+    return (
+      <div
+        className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
+        style={{
+          backgroundColor: "#F7FAFC",
+          fontFamily: "Inter, sans-serif",
+        }}
+      >
+        <div className="flex items-center justify-center h-64">
+          <div className="bg-white p-6 rounded shadow">
+            <p className="text-red-600 mb-3">{error}</p>
+            <button className="px-4 py-2 rounded bg-blue-600 text-white" onClick={() => navigate('/')}>Go Home</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Use profile data to render page. Keep your markup & style unchanged; just replace hardcoded bits with data.
   return (
     <div
       className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
@@ -101,8 +200,7 @@ const ProfilePage = () => {
               className="bg-center bg-no-repeat aspect-square bg-cover size-10"
               style={{
                 borderRadius: "9999px",
-                backgroundImage:
-                  'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBziVjYVqBtMVYmgK_fur_MYcl8f0K4r0StYUOv5FQTVXeD5A28BbaQZ0iOVOxu8dgQ3LOuuoyw2TZra_aQaVj8FQYvPiVLa4Fl1pdmNQXnPDK-DXMz-tfKJbsZrEg-x22FCljcRj3c1p44gTQBJkqo3ZK3oQj4hXXWcDh3aWPeT51Gwd42csHwanxyIO0MI_ioX2oJVYxZg-bC93YRFOnbf-x9gLnqH7_3YkPK8Aj3gtYsfzVjt3AU25WtC1gstObdamwDxPuaVGjI")',
+                backgroundImage: `url("${(profile && profile.avatar) || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBziVjYVqBtMVYmgK_fur_MYcl8f0K4r0StYUOv5FQTVXeD5A28BbaQZ0iOVOxu8dgQ3LOuuoyw2TZra_aQaVj8FQYvPiVLa4Fl1pdmNQXnPDK-DXMz-tfKJbsZrEg-x22FCljcRj3c1p44gTQBJkqo3ZK3oQj4hXXWcDh3aWPeT51Gwd42csHwanxyIO0MI_ioX2oJVYxZg-bC93YRFOnbf-x9gLnqH7_3YkPK8Aj3gtYsfzVjt3AU25WtC1gstObdamwDxPuaVGjI'}")`
               }}
             ></div>
           </div>
@@ -142,7 +240,7 @@ const ProfilePage = () => {
                     borderRadius: "9999px",
                     borderColor: "#FFFFFF",
                     backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0ZNjXVqvPpGrRPrMVcLuJ8KTVUrjuoVVc3w0LZizCWB-wFDa4yqDLeTnrjODqkq8l6nNM7dAwxEN738IG-T0rur3F93dxzQFDkAY-0GS51OGiVNZ27jnXQLIUkjKJrPNAacSP7nkWoEoRpmuYVbAwim4UWZ4mO5fPpLV-xSCnLIfon9e_gVO7NdfI_6F4P1OfeNgHdBUpr2ygVuMv-tkLDLylwZ4tOIYXbhLHqWZWHKdnHd1DYx3MBehWWPDJKhYA9U83YMjHXiha")',
+                      `url("${(profile && profile.avatar) || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0ZNjXVqvPpGrRPrMVcLuJ8KTVUrjuoVVc3w0LZizCWB-wFDa4yqDLeTnrjODqkq8l6nNM7dAwxEN738IG-T0rur3F93dxzQFDkAY-0GS51OGiVNZ27jnXQLIUkjKJrPNAacSP7nkWoEoRpmuYVbAwim4UWZ4mO5fPpLV-xSCnLIfon9e_gVO7NdfI_6F4P1OfeNgHdBUpr2ygVuMv-tkLDLylwZ4tOIYXbhLHqWZWHKdnHd1DYx3MBehWWPDJKhYA9U83YMjHXiha'}")`
                   }}
                 ></div>
                 <div className="flex flex-col justify-center flex-grow pt-16 md:pt-0 md:pl-48">
@@ -150,55 +248,83 @@ const ProfilePage = () => {
                     className="text-2xl font-bold"
                     style={{ color: "#0F172A" }}
                   >
-                    Eleanor Vance
+                    {profile && profile.username ? profile.username : "Unnamed"}
                   </p>
                   <p
                     className="text-base font-normal"
                     style={{ color: "#64748B" }}
                   >
-                    @eleanorvance
+                    @{profile && profile.username ? profile.username : "username"}
                   </p>
                   <p
                     className="text-base font-normal mt-2 max-w-md"
                     style={{ color: "#64748B" }}
                   >
-                    Digital artist &amp; photographer exploring the intersection
-                    of nature and technology. Based in San Francisco.
+                    {profile && profile.bio ? profile.bio : "This user hasn't added a bio yet."}
                   </p>
                 </div>
               </div>
 
               {/* Follow / Message buttons */}
               <div className="flex w-full max-w-[480px] gap-3 mt-4 md:mt-0">
-                <button
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
-                  style={{
-                    borderRadius: "0.5rem",
-                    backgroundColor: "#0066ff",
-                    color: "#ffffff",
-                  }}
-                >
-                  <span className="truncate">Follow</span>
-                </button>
-                <button
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
-                  style={{
-                    borderRadius: "0.5rem",
-                    backgroundColor: "#00C2A8", // accent
-                    color: "#ffffff",
-                  }}
-                >
-                  <span className="truncate">Message</span>
-                </button>
+                {isOwnProfile ? (
+                  <>
+                    <button
+                      onClick={handleEditProfile}
+                      className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
+                      style={{
+                        borderRadius: "0.5rem",
+                        backgroundColor: "#0066ff",
+                        color: "#ffffff",
+                      }}
+                    >
+                      <span className="truncate">Edit</span>
+                    </button>
+                    <button
+                      className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
+                      style={{
+                        borderRadius: "0.5rem",
+                        backgroundColor: "#00C2A8", // accent
+                        color: "#ffffff",
+                      }}
+                    >
+                      <span className="truncate">Remove message</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleFollowToggle}
+                      className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
+                      style={{
+                        borderRadius: "0.5rem",
+                        backgroundColor: viewerIsFollowing ? "#E5E7EB" : "#0066ff",
+                        color: viewerIsFollowing ? "#0F172A" : "#ffffff",
+                      }}
+                    >
+                      <span className="truncate">{viewerIsFollowing ? "Following" : "Follow"}</span>
+                    </button>
+                    <button
+                      className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold tracking-wide flex-1 transition-colors"
+                      style={{
+                        borderRadius: "0.5rem",
+                        backgroundColor: "#00C2A8", // accent
+                        color: "#ffffff",
+                      }}
+                    >
+                      <span className="truncate">Message</span>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
             {/* Stats */}
             <div className="flex flex-wrap gap-3 py-3 mt-4">
               {[
-                ["1,204", "Posts"],
-                ["25.8K", "Followers"],
-                ["1,530", "Following"],
+                [String(posts.length || 0), "Posts"],
+                [String(followersCount || 0), "Followers"],
+                [String(followingCount || 0), "Following"],
               ].map(([value, label]) => (
                 <div
                   key={label}
@@ -263,94 +389,67 @@ const ProfilePage = () => {
           </div>
 
           {/* Content grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-            {[
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAx3eO0MeVAF0oYl1c-wrNDDs7SyouK6jkpc7QJOCbepL6sQZBFBQoJDJwE5eiElO3xDxOuByIEk-T-Nd-wWuhxh-Vrp6Vj0h717BfIlwHaA7aJ3_TX2BeOLhShd8X0PyRDrt24ZumvdZg973L7Thnbu62dMXycVrGh3dN76Ymwg348M9xu16M4s7YPaIuG_yB4hRVBhPw2My-GpBiBMHwQaf9BPcsQJhzAWGW1bNgNNJ0kHUNACcAZaGyZ6WmaiOiHLnZ55oa-K9I5",
-                text: "Lost in the woods. 🌲 Found my peace.",
-                likes: "312",
-                comments: "45",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA8uQ-kzAeSfYBtwM37k3OdVQk8ev2CqSRqEyzeZFCpoL7tZLjne_qqy-BftC6INNTI4Kb_Bre7qVTi-U0IhoWXqP1n4vcd1LyMmVXYy34_kYNVsHx3pZ4qteMHqLxElzwBdvXsBnZGgj7joTKcuMT2WmVtJWnIDXzyckWsCvzYuFrtD5BaCqskRZSF-Ojuhuq2ugslnyd9vkdzE6Kx-Gm-cls8m_VJYpqy4KXP9egeclOfFtFN8EPaTq49mOMq-G6lcgy_NEyAxvgW",
-                text: "Capturing moments, one frame at a time.",
-                likes: "560",
-                comments: "88",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeJ3SBuFp-UYvuwYvYO6vspw6m7s55VcU5pGX6cepvhzaVGAgObFBoQ2XbfJPwX3-kx2I-pjvbo4szMuqyfVDgouhNubp9HStf3hV5uDu2BE_QzVwJ6hyjy4EeiA6CRVRm7C17qU0uoNSV05m1ytjzATv9-x8XPeED3B9IBSTqrrRKcSBAZIXiTgvMZeUZZ0g9yhssj0ttT-hPGulao_yDtR2u5IdvgDsRa50_joTDZfgPH32Ejg9Uf1G-_-qmZyCF_3D_1n-k3SVd",
-                text: "City lights and late night adventures.",
-                likes: "721",
-                comments: "102",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDHbAWA1rZ_5QGYXmo600fNOVNOyXsH12f0MFRa4rXxCqSZD4bjPa-PsVxrh_phAwfqNpexaFpp388r6whWUf5ZNRExJV90CNhCaa5qgRZ2UohRcqN-HkByTDk5nTGmRS_ODRvDQHddoFpAj3Llp5OlkPRNF18lgMZC45VzarpZ4XsOfZ-eY2SNbvNCVZxQud6Ra501jIswFNIQ9pj1ca33yUeCn2i7nba6WMWWiLhQv7a9dMEfHeQgQcYll1Fs3lpLMxtYnajNuK8a",
-                text: "Experimenting with new light painting techniques.",
-                likes: "459",
-                comments: "67",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBcO-BLgVMJfHwXoN5LRhkaKAdSE8VHLkd9IFyPz3Y1GM46lOA_zKgdbwCqmFamMD2IIsBKc-ZcH5KWnaA6nwX3Ghl9ZaVsF9LHAt0Z0825a4V3BcbvCive-IFX0QigzsBKHkO97bQjldF1LQWlLXoeD54qQWCU0vsO9oW79_wdp-hGUGYY0E8KIvVHyr32Lk1gVJss3o3zHU786ftInmLpO_ZrmJy46UTdlW6LKNAlUToyf2Go9Uv3jspK7EXO8wc1vD2cuPh8Zb7J",
-                text: "Morning coffee and creative flows.",
-                likes: "289",
-                comments: "32",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCES7OMszAdpciq4R2Ip9r8fZY76W0N0AOOYN2g3asIlQi0NTWD13t6OSEZBKtwV3IQ8vLXCXhgnXRP0hGcmAnNlCBMIjAF5jzCN62GieAVQJSZLs0_wSYVEJnfkx0A1BVInKf4bl1Ba41WllzgsygJkSacYeLTZM55VZZT_HZ5fcmSvQwEsFxkwQcXOy77ENQNFmAnWzHwRgzqqCd84FO-e5GnYwkcvqT1nZa-b9OkmTOWg0hs-tGFrOJTXBOLoi4nyKMISKjk6T4u",
-                text: "The mountains are calling and I must go.",
-                likes: "983",
-                comments: "150",
-              },
-            ].map((post) => (
-              <div
-                key={post.text}
-                className="flex flex-col shadow-sm overflow-hidden"
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "1.5rem",
-                  boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-                }}
-              >
-                <div
-                  className="bg-center bg-no-repeat aspect-[4/3] bg-cover"
-                  style={{
-                    backgroundImage: `url("${post.img}")`,
-                  }}
-                ></div>
-                <div className="p-4 flex flex-col gap-2">
-                  <p
-                    className="text-base font-medium"
-                    style={{ color: "#0F172A" }}
-                  >
-                    {post.text}
-                  </p>
-                  <div
-                    className="flex items-center gap-4 pt-2"
-                    style={{ color: "#64748B" }}
-                  >
-                    <div className="flex items-center gap-1.5 cursor-pointer">
-                      <span className="material-symbols-outlined text-xl">
-                        favorite
-                      </span>
-                      <span className="text-sm font-medium">
-                        {post.likes}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 cursor-pointer">
-                      <span className="material-symbols-outlined text-xl">
-                        chat_bubble
-                      </span>
-                      <span className="text-sm font-medium">
-                        {post.comments}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <PostGridComponent posts={posts} />
         </div>
       </main>
+    </div>
+  );
+};
+
+PostGridComponent = ({ posts = [] }) => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      {posts.length === 0 ? (
+        <div className="col-span-full text-center p-6 text-gray-600 bg-white rounded-lg">No posts yet</div>
+      ) : (
+        posts.map((post) => (
+          <div
+            key={post._id}
+            className="flex flex-col shadow-sm overflow-hidden"
+            style={{
+              backgroundColor: "#FFFFFF",
+              borderRadius: "1.5rem",
+              boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+            }}
+          >
+            <div
+              className="bg-center bg-no-repeat aspect-[4/3] bg-cover"
+              style={{
+                backgroundImage: `url("${post.media || 'https://via.placeholder.com/600x450'}")`,
+              }}
+            ></div>
+            <div className="p-4 flex flex-col gap-2">
+              <p
+                className="text-base font-medium"
+                style={{ color: "#0F172A" }}
+              >
+                {post.content || ''}
+              </p>
+              <div
+                className="flex items-center gap-4 pt-2"
+                style={{ color: "#64748B" }}
+              >
+                <div className="flex items-center gap-1.5 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl">
+                    favorite
+                  </span>
+                  <span className="text-sm font-medium">
+                    {post.likeCount || 0}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 cursor-pointer">
+                  <span className="material-symbols-outlined text-xl">
+                    chat_bubble
+                  </span>
+                  <span className="text-sm font-medium">
+                    {post.commentsCount || 0}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 };

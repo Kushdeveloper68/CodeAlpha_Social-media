@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Link} from "react-router-dom";
 const LandingPage = () => {
   return (
    <div
@@ -61,7 +61,8 @@ const LandingPage = () => {
                 </nav>
 
                 <div className="flex gap-2">
-                  <button
+                  <Link
+                    to="/signup"
                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
                     style={{
                       backgroundColor: "#0066ff", // primary
@@ -71,8 +72,9 @@ const LandingPage = () => {
                     }}
                   >
                     <span className="truncate">Register Now</span>
-                  </button>
-                  <button
+                  </Link>
+                  <Link
+                    to="/login"
                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 px-4 border text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-100 transition-colors"
                     style={{
                       backgroundColor: "#f5f7f8", // background-light
@@ -83,7 +85,7 @@ const LandingPage = () => {
                     }}
                   >
                     <span className="truncate">Login</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </header>
@@ -114,7 +116,8 @@ const LandingPage = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                      <button
+                      <Link
+                      to="/signup"
                         className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-12 px-5 text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
                         style={{
                           backgroundColor: "#0066ff",
@@ -124,8 +127,9 @@ const LandingPage = () => {
                         }}
                       >
                         <span className="truncate">Register Now</span>
-                      </button>
-                      <button
+                      </Link>
+                      <Link
+                      to="/login"
                         className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-12 px-5 border text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-100 transition-colors"
                         style={{
                           backgroundColor: "#f5f7f8",
@@ -136,7 +140,7 @@ const LandingPage = () => {
                         }}
                       >
                         <span className="truncate">Login</span>
-                      </button>
+                      </Link>
                     </div>
                   </div>
 
