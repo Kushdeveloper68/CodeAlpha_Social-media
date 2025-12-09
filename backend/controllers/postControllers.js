@@ -128,8 +128,52 @@ async function verifyOtpAndSignup(req, res) {
   }
 }
 
+// LOGIN
+async function login(req, res) {
+  try {
+    // Accept identifier (username or email) and password
+    const { identifier, password } = req.body;
+    if (!identifier || !password) {
+      return res.status(400).json({ success: false, message: 'Identifier and password are required' });
+    }
+
+    const isEmail = String(identifier).includes('@');
+    const query = isEmail ? { email: identifier.toLowerCase().trim() } : { username: identifier.toLowerCase().trim() };
+
+    const user = await userModel.findOne(query);
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+
+    // Return basic user info (don't return password)
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar || '',
+        role: user.role || 'user'
+      }
+    });
+  } catch (error) {
+    console.error('login error:', error);
+    return res.status(500).json({ success: false, message: 'Login failed', error: error.message });
+  }
+}
+
 module.exports = {
   sendOtp,
   verifyOtpAndSignup,
-  // ...other exported functions can be added here (login, etc.)
+  login
+  // ...other exported functions can be added here
 };

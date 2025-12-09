@@ -42,3 +42,17 @@ export const verifySignupApi = async ({ username, email, password, otp }) => {
     return error.response?.data || { success: false, message: 'Signup failed' };
   }
 };
+
+
+// LOGIN
+export const loginApi = async (identifier, password) => {
+  try {
+    const response = await API.post('/api/login', { identifier, password });
+    return response.data;
+  } catch (error) {
+    console.error('loginApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Login failed' };
+  }
+};
+
+export default API;

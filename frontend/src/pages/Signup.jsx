@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOtpApi, verifySignupApi } from "../api";
-
+import { useAuth } from "../context/authContext";
 export default function Signup() {
   const navigate = useNavigate();
-
+ const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [otp, setOtp] = useState("");
@@ -68,6 +68,7 @@ export default function Signup() {
     if (res && res.success) {
       // If backend returns token, store and redirect to home or login
       if (res.token) {
+        setToken(res.token)
         localStorage.setItem("token", res.token);
       }
       if (res.user) {
