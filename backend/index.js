@@ -10,7 +10,9 @@ const { mongodbConnection } = require("./connection/connection.js")
 const postRouter = require('./routes/postRouter');
 const getRouter = require('./routes/getRouter');
 
-// middleware to verify JWT token
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // body parser
 app.use(bodyPraser.json())

@@ -171,9 +171,44 @@ async function login(req, res) {
   }
 }
 
+
+async function createPost(req, res) {
+  try {
+    // jwt middleware should set req.user = { id, ... }
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized. Please login.' });
+
+    const content = (req.body.content || '').trim();
+
+    // Accept one image uploaded under field name 'image'
+    let mediaUrl = '';
+    if (req.file) {
+      // store accessible URL path relative to backend (served later)
+      mediaUrl = `/uploads/posts/${req.file.filename}`;
+    }
+
+    // create post
+    const newPost = await postModel.create({
+      userId,
+      content,
+      media: mediaUrl,
+      likeCount: 0,
+      commentsCount: 0,
+      privacy: 'public'
+    });
+
+    return res.status(201).json({ success: true, message: 'Post created', post: newPost });
+  } catch (error) {
+    console.error('createPost error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to create post', error: error.message });
+  }
+}
+
+
 module.exports = {
   sendOtp,
   verifyOtpAndSignup,
-  login
+  login,
+  createPost
   // ...other exported functions can be added here
 };

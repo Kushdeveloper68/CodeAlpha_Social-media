@@ -68,4 +68,18 @@ export const getProfileApi = async (username) => {
   }
 };
 
+// CREATE POST (multipart/form-data)
+export const createPostApi = async (formData) => {
+  try {
+    // const token = localStorage.getItem('token');
+    // const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    // axios will set multipart/form-data headers automatically
+    const response = await API.post('/api/create-post', formData);
+    return response.data;
+  } catch (error) {
+    console.error('createPostApi error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: 'Failed to create post' };
+  }
+};
+
 export default API;

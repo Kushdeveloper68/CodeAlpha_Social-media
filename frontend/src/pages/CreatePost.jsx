@@ -1,6 +1,98 @@
-import React from "react";
+// frontend/src/pages/CreatePost.jsx
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { createPostApi, useApi } from "../api";
+import { useAuth } from "../context/authContext";
 
 const CreatePostPage = () => {
+  const api = useApi();
+  const navigate = useNavigate();
+  const { authToken } = useAuth();
+  const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
+  const fileInputRef = useRef();
+
+  // require login: redirect if no token
+  useEffect(() => {
+    const token = authToken || localStorage.getItem("token");
+    if (!token) navigate("/login");
+  }, [authToken, navigate]);
+
+  useEffect(() => {
+    if (!imageFile) {
+      setPreviewUrl("");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => setPreviewUrl(e.target.result);
+    reader.readAsDataURL(imageFile);
+    return () => {
+      // cleanup
+    };
+  }, [imageFile]);
+
+  const handleImageChange = (e) => {
+    setError("");
+    const file = e.target.files[0];
+    if (!file) {
+      setImageFile(null);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      setError("Only image files are allowed.");
+      setImageFile(null);
+      fileInputRef.current.value = "";
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image must be smaller than 5MB.");
+      setImageFile(null);
+      fileInputRef.current.value = "";
+      return;
+    }
+    setImageFile(file);
+  };
+
+  const handleSubmit = async (e) => {
+    e && e.preventDefault();
+    setError("");
+    setInfo("");
+
+    if (!content.trim() && !imageFile) {
+      setError("Please add text or an image to post.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("content", content || "");
+      if (imageFile) formData.append("image", imageFile);
+
+      const res = await createPostApi(formData);
+      if (res && res.success) {
+        setInfo("Post created successfully.");
+        // navigate to the logged-in user's profile (use stored user)
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        const username = user && user.username ? user.username : null;
+        setTimeout(() => {
+          if (username) navigate(`/profile/${username}`);
+          else navigate("/home");
+        }, 700);
+      } else {
+        setError((res && res.message) || "Failed to create post.");
+      }
+    } catch (err) {
+      setError((err && err.message) || "Error creating post.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="relative flex min-h-screen w-full flex-col"
@@ -29,6 +121,7 @@ const CreatePostPage = () => {
                   Create Post
                 </p>
                 <button
+                  onClick={() => navigate(-1)}
                   className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-10 w-10 px-0"
                   style={{
                     borderRadius: "1rem", // rounded-xl
@@ -42,91 +135,117 @@ const CreatePostPage = () => {
                 </button>
               </div>
 
-              {/* Composer */}
-              <div className="flex items-start gap-4">
-                <div
-                  className="bg-center bg-no-repeat aspect-square bg-cover size-10 shrink-0"
-                  style={{
-                    borderRadius: "9999px",
-                    backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCdQHvpRR2KSI0oHwsiHV_IZoGZuxBvANuxOEKGeyDif-h-0t2QVKf80Emci6QzF4mDpdB2GhcdmYEc_q-S-T9AkQfhhabYE3HLRmkP9FhrcMsHvZ0TsL0jqGLQLEAJ6m1vNcxpoiutfk9Y5LQJhwFaZJtZUlvxIFbtFR7AgFaYumaSfDwoJn_qINZN4PsKzJmuebLlhIKb2NExZoWQRXls8xXOlusONIP4nZzolYox9BkTlU0z31gJk08YyG6cVpwu5lrTQIQ-H0or")',
-                  }}
-                ></div>
-                <div className="flex flex-1 flex-col">
-                  <textarea
-                    rows={4}
-                    className="flex w-full min-w-0 flex-1 resize-none overflow-hidden h-auto text-lg font-normal leading-normal p-0"
-                    placeholder="What's on your mind, Alex?"
-                    style={{
-                      borderRadius: "1rem", // rounded-xl
-                      color: "#0f172a",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      outline: "none",
-                      boxShadow: "none",
-                      caretColor: "#0062ff",
-                    }}
-                  />
-                </div>
-              </div>
+              {/* SERVER ERROR / INFO */}
+              {error && <div className="text-sm text-red-700 bg-red-50 p-3 rounded">{error}</div>}
+              {info && <div className="text-sm text-green-700 bg-green-50 p-3 rounded">{info}</div>}
 
-              {/* Images Preview */}
-              <div className="flex w-full grow">
-                <div
-                  className="w-full gap-2 overflow-hidden flex aspect-[16/9] border border-dashed border-gray-300"
-                  style={{
-                    backgroundColor: "#ffffff",
-                    borderRadius: "1rem", // rounded-xl
-                  }}
-                >
+              {/* Composer */}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="flex items-start gap-4">
                   <div
-                    className="flex-1 flex items-center justify-center w-full bg-center bg-no-repeat bg-cover aspect-auto"
+                    className="bg-center bg-no-repeat aspect-square bg-cover size-10 shrink-0"
                     style={{
+                      borderRadius: "9999px",
                       backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDoVNAb0ARqnyLDGYrcHtWJwIVRLZPGa-TpPzbv0v0dmSBouOuahg4SLD0FJgXu32vv1NhbWZd3T7svlI7OBPgvEZ5Cj7wjvlmXFjOhKfcH6HB3Mx9LN0Hswp-Nfg9K4JbjeRjptaf5SOpG2Y37nIJDLdnrSaCNch4n2O0CxUuFcoLQH0V_oFNiIiUG1ZivKeDSfst7IvH9u1HmqxGMb87ZkgTZK3J85x6L6iP2Fmt1ZcA8F0cr-hmtmPyJyHJbAmrxqegbgvburt5S")',
+                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCdQHvpRR2KSI0oHwsiHV_IZoGZuxBvANuxOEKGeyDif-h-0t2QVKf80Emci6QzF4mDpdB2GhcdmYEc_q-S-T9AkQfhhabYE3HLRmkP9FhrcMsHvZ0TsL0jqGLQLEAJ6m1vNcxpoiutfk9Y5LQJhwFaZJtZUlvxIFbtFR7AgFaYumaSfDwoJn_qINZN4PsKzJmuebLlhIKb2NExZoWQRXls8xXOlusONIP4nZzolYox9BkTlU0z31gJk08YyG6cVpwu5lrTQIQ-H0or")',
                     }}
                   ></div>
+                  <div className="flex flex-1 flex-col">
+                    <textarea
+                      rows={4}
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      className="flex w-full min-w-0 flex-1 resize-none overflow-hidden h-auto text-lg font-normal leading-normal p-0"
+                      placeholder="What's on your mind?"
+                      style={{
+                        borderRadius: "1rem", // rounded-xl
+                        color: "#0f172a",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        outline: "none",
+                        boxShadow: "none",
+                        caretColor: "#0062ff",
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Action Icons & Post Button */}
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div
-                  className="flex items-center gap-1"
-                  style={{ color: "#64748b" }} // muted
-                >
-                  <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <span
-                      className="material-symbols-outlined"
-                      style={{ color: "#0062ff" }} // primary
+                {/* Images Preview */}
+                <div className="flex w-full grow flex-col gap-2">
+                  {previewUrl ? (
+                    <div className="w-full rounded overflow-hidden">
+                      <img src={previewUrl} alt="preview" className="w-full object-cover rounded" />
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImageFile(null);
+                            setPreviewUrl("");
+                            fileInputRef.current.value = "";
+                          }}
+                          className="px-3 py-2 rounded bg-red-600 text-white"
+                        >
+                          Remove Image
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="w-full gap-2 overflow-hidden flex aspect-[16/9] border border-dashed border-gray-300 items-center justify-center"
+                      style={{
+                        backgroundColor: "#ffffff",
+                        borderRadius: "1rem", // rounded-xl
+                      }}
                     >
-                      image
-                    </span>
-                  </button>
-                  <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <span className="material-symbols-outlined">sell</span>
-                  </button>
-                  <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 transition-colors">
-                    <span className="material-symbols-outlined">
-                      location_on
-                    </span>
-                  </button>
+                      <div className="text-sm text-gray-500">No image selected</div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-3">
+                    <label className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 rounded cursor-pointer">
+                      <span className="material-symbols-outlined">image</span>
+                      <span className="text-sm">Add Image</span>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                    <div className="text-sm text-gray-500">Max 1 image · Max 5MB</div>
+                  </div>
                 </div>
 
-                {/* Primary Post Button */}
-                <div className="flex w-full sm:w-auto">
-                  <button
-                    className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-12 px-6 flex-1 text-base font-bold leading-normal tracking-[0.015em]"
-                    style={{
-                      borderRadius: "1rem", // rounded-xl
-                      backgroundColor: "#0062ff",
-                      color: "#ffffff",
-                    }}
+                {/* Action Icons & Post Button */}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div
+                    className="flex items-center gap-1"
+                    style={{ color: "#64748b" }} // muted
                   >
-                    <span className="truncate">Post</span>
-                  </button>
+                    <button type="button" onClick={() => fileInputRef.current.click()} className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 transition-colors">
+                      <span className="material-symbols-outlined" style={{ color: "#0062ff" }}>image</span>
+                    </button>
+                  </div>
+
+                  {/* Primary Post Button */}
+                  <div className="flex w-full sm:w-auto">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden h-12 px-6 flex-1 text-base font-bold leading-normal tracking-[0.015em]"
+                      style={{
+                        borderRadius: "1rem", // rounded-xl
+                        backgroundColor: "#0062ff",
+                        color: "#ffffff",
+                        opacity: loading ? 0.7 : 1
+                      }}
+                    >
+                      {loading ? "Posting..." : "Post"}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </form>
 
               {/* Disabled Button Example */}
               <div
@@ -151,6 +270,7 @@ const CreatePostPage = () => {
                   <span className="truncate">Post</span>
                 </button>
               </div>
+
             </div>
           </div>
         </div>
