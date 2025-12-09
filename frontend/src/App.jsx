@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom"
 import { AuthProvider } from './context/authContext';
 import Layout from './Layout';
 import {
+
   LandingPage,
   LoginPage,
   SignupPage,
@@ -21,21 +22,27 @@ function App() {
   const [count, setCount] = useState(0)
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/profile/:username" element={<ProfilePage />} />
-            <Route path="/create-post" element={<CreatePostPage />} />
-            <Route path="/followers-following/:username" element={<FollowersFollowingPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+    <BrowserRouter>
+   <Layout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/home" element={<HomePage />} />
+        {/* FUTURE USE */}
+        {/* <Route path="/explore" element={<ExplorePage />} />  */}
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        {/* FUTURE USE */}
+        {/* <Route path="/post/:userId/:postId" element={<PostDetailPage />} />  */}
+        <Route path="/create-post" element={<CreatePostPage />} />
+        {/* FUTURE USE */}
+        {/* <Route path="/notifications" element={<NotificationsPage />} />  */}
+        <Route path="/followers-following/:username" element={<FollowersFollowingPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Layout>
+    </BrowserRouter>
     </AuthProvider>
   )
 }
