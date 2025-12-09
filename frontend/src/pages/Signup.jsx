@@ -1,192 +1,195 @@
-import React from "react";
+// frontend/src/pages/Signup.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { sendOtpApi, verifySignupApi } from "../api";
 
-const SignupPage = () => {
+export default function Signup() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [step, setStep] = useState("request"); // 'request' or 'verify'
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(""); // success/info
+  const [error, setError] = useState("");
+
+  const requestOtp = async (e) => {
+    e && e.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+    const res = await sendOtpApi(email);
+    setLoading(false);
+
+    if (res && res.success) {
+      setMessage("OTP sent to your email. It will expire shortly.");
+      setStep("verify");
+    } else {
+      setError(res && res.message ? res.message : "Failed to send OTP. Try again.");
+    }
+  };
+
+  const submitSignup = async (e) => {
+    e && e.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (!username.trim()) {
+      setError("Please enter a username.");
+      return;
+    }
+    if (!otp || otp.trim().length < 4) {
+      setError("Please enter the OTP sent to your email.");
+      return;
+    }
+    if (!password || password.length < 6) {
+      setError("Password should be at least 6 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    const res = await verifySignupApi({ username, email, password, otp });
+    setLoading(false);
+
+    if (res && res.success) {
+      // If backend returns token, store and redirect to home or login
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+      }
+      if (res.user) {
+        localStorage.setItem("user", JSON.stringify(res.user));
+      }
+      setMessage("Signup successful. Redirecting...");
+      setTimeout(() => navigate("/"), 900);
+    } else {
+      setError(res && res.message ? res.message : "Signup failed. Try again.");
+    }
+  };
+
   return (
-    <div
-      className="relative flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-6 lg:p-8"
-      style={{
-        backgroundColor: "#f5f7f8", // background-light
-        fontFamily: "Inter, sans-serif",
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "#f5f7f8", fontFamily: "Inter, sans-serif" }}>
       <div className="w-full max-w-md">
-        <div className="flex flex-col items-center justify-center">
-          <h1
-            className="text-3xl font-bold"
-            style={{ color: "#0F172A" }} // dark-text
-          >
-            SocialX
-          </h1>
-        </div>
+        <div className="bg-white p-8 rounded-2xl shadow-sm border" style={{ borderColor: "#e5e7eb" }}>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: "#0f172a" }}>Create an account</h2>
+          <p className="text-sm mb-4" style={{ color: "#64748b" }}>Sign up to join SocialX.</p>
 
-        <div
-          className="mt-8 bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-200 dark:border-gray-800"
-          style={{
-            borderRadius: "2rem", // rounded-2xl
-            backgroundColor: "#ffffff",
-            borderColor: "#e5e7eb",
-          }}
-        >
-          <div className="flex flex-col gap-2 mb-8">
-            <p
-              className="text-2xl font-bold leading-tight tracking-tight"
-              style={{ color: "#0F172A" }} // dark-text
-            >
-              Create an Account
-            </p>
-            <p
-              className="text-base font-normal leading-normal"
-              style={{ color: "#64748B" }} // muted-text
-            >
-              Join SocialX to connect with your friends.
-            </p>
-          </div>
+          {error && <div className="mb-4 text-sm text-red-700 bg-red-50 p-3 rounded">{error}</div>}
+          {message && <div className="mb-4 text-sm text-green-700 bg-green-50 p-3 rounded">{message}</div>}
 
-          <form className="flex flex-col gap-6">
-            {/* Username */}
-            <div className="flex flex-col gap-2">
-              <label className="flex flex-col w-full">
-                <p
-                  className="text-sm font-medium leading-normal pb-2"
-                  style={{ color: "#0F172A" }}
-                >
-                  Username
-                </p>
-                <input
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-4 text-base font-normal leading-normal border"
-                  placeholder="Enter your username"
-                  style={{
-                    borderRadius: "0.5rem",
-                    color: "#0F172A",
-                    borderColor: "#d1d5db",
-                    backgroundColor: "#ffffff",
-                  }}
-                />
-              </label>
-            </div>
-
-            {/* Email */}
-            <div className="flex flex-col gap-2">
-              <label className="flex flex-col w-full">
-                <p
-                  className="text-sm font-medium leading-normal pb-2"
-                  style={{ color: "#0F172A" }}
-                >
-                  Email
-                </p>
+          {step === "request" && (
+            <form onSubmit={requestOtp} className="flex flex-col gap-4">
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-2" style={{ color: "#0f172a" }}>Email</span>
                 <input
                   type="email"
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-4 text-base font-normal leading-normal border"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  style={{
-                    borderRadius: "0.5rem",
-                    color: "#0F172A",
-                    borderColor: "#d1d5db",
-                    backgroundColor: "#ffffff",
-                  }}
+                  className="h-12 px-4 rounded-md border"
+                  style={{ borderColor: "#d1d5db" }}
                 />
               </label>
-            </div>
 
-            {/* Password */}
-            <div className="flex flex-col gap-2">
-              <label className="flex flex-col w-full">
-                <p
-                  className="text-sm font-medium leading-normal pb-2"
-                  style={{ color: "#0F172A" }}
-                >
-                  Password
-                </p>
-                <div className="relative flex w-full flex-1 items-stretch">
-                  <input
-                    type="password"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-4 pr-12 text-base font-normal leading-normal border"
-                    placeholder="Enter your password"
-                    style={{
-                      borderRadius: "0.5rem",
-                      color: "#0F172A",
-                      borderColor: "#d1d5db",
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center pr-4"
-                    style={{ color: "#64748B" }} // muted-text
-                  >
-                    <span className="material-symbols-outlined">visibility</span>
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* Confirm Password */}
-            <div className="flex flex-col gap-2">
-              <label className="flex flex-col w-full">
-                <p
-                  className="text-sm font-medium leading-normal pb-2"
-                  style={{ color: "#0F172A" }}
-                >
-                  Confirm Password
-                </p>
-                <div className="relative flex w-full flex-1 items-stretch">
-                  <input
-                    type="password"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden h-12 px-4 pr-12 text-base font-normal leading-normal border"
-                    placeholder="Confirm your password"
-                    style={{
-                      borderRadius: "0.5rem",
-                      color: "#0F172A",
-                      borderColor: "#d1d5db",
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center pr-4"
-                    style={{ color: "#64748B" }}
-                  >
-                    <span className="material-symbols-outlined">
-                      visibility_off
-                    </span>
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* Register button */}
-            <div className="flex flex-col mt-2">
               <button
                 type="submit"
-                className="flex h-12 items-center justify-center px-6 text-base font-semibold transition-colors focus:outline-none"
-                style={{
-                  backgroundColor: "#0066ff", // primary
-                  color: "#ffffff",
-                  borderRadius: "0.5rem",
-                }}
+                disabled={loading}
+                className="h-12 rounded-md text-white"
+                style={{ background: "#0066ff" }}
               >
-                Register
+                {loading ? "Sending OTP..." : "Get OTP"}
               </button>
-            </div>
-          </form>
 
-          <div className="mt-8 text-center">
-            <p
-              className="text-sm"
-              style={{ color: "#64748B" }} // muted-text
-            >
-              Already have an account?{" "}
-              <a
-                href="#"
-                className="font-semibold hover:underline"
-                style={{ color: "#0066ff" }} // primary
-              >
-                Log in
-              </a>
-            </p>
-          </div>
+              <div className="text-sm text-gray-500 mt-2">
+                Already have an account? <button onClick={() => navigate('/login')} className="text-blue-600 font-medium">Log in</button>
+              </div>
+            </form>
+          )}
+
+          {step === "verify" && (
+            <form onSubmit={submitSignup} className="flex flex-col gap-4">
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-2" style={{ color: "#0f172a" }}>Username</span>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Choose a username"
+                  className="h-12 px-4 rounded-md border"
+                  style={{ borderColor: "#d1d5db" }}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-2" style={{ color: "#0f172a" }}>OTP</span>
+                <input
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Enter the OTP"
+                  className="h-12 px-4 rounded-md border"
+                  style={{ borderColor: "#d1d5db" }}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-2" style={{ color: "#0f172a" }}>Password</span>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a password"
+                  className="h-12 px-4 rounded-md border"
+                  style={{ borderColor: "#d1d5db" }}
+                />
+              </label>
+
+              <label className="flex flex-col">
+                <span className="text-sm font-medium mb-2" style={{ color: "#0f172a" }}>Confirm password</span>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm password"
+                  className="h-12 px-4 rounded-md border"
+                  style={{ borderColor: "#d1d5db" }}
+                />
+              </label>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setStep("request")}
+                  className="h-12 rounded-md px-4 border"
+                  style={{ borderColor: "#d1d5db" }}
+                >
+                  Back
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="h-12 rounded-md px-4 text-white"
+                  style={{ background: "#0066ff" }}
+                >
+                  {loading ? "Creating account..." : "Verify & Sign up"}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>
   );
-};
-
-export default SignupPage;
+}

@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import './App.css'
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import { useApi } from './api/';
 import {
-  LandingPage, LoginPage, SignupPage, HomePage, ExplorePage, ProfilePage,
+  LandingPage,
+  LoginPage,
+  SignupPage,
+  HomePage,
+  ExplorePage,
+  ProfilePage,
   PostDetailPage,
   CreatePostPage,
   NotificationsPage, FollowersFollowingPage,
@@ -11,11 +18,23 @@ import {
 
 function App() {
   const [count, setCount] = useState(0)
-
   return (
-    <>
-      <NotFoundPage />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/post/:postId" element={<PostDetailPage />} />
+        <Route path="/create-post" element={<CreatePostPage />} />
+        {/* <Route path="/notifications" element={<NotificationsPage />} /> */}
+        <Route path="/followers-following/:username" element={<FollowersFollowingPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
